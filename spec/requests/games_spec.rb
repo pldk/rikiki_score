@@ -1,53 +1,54 @@
+# frozen_string_literal: true
+
 require 'rails_helper'
 
-RSpec.describe "Games", type: :request do
-  describe "GET /index" do
-    it "returns http success" do
-      get "/games/index"
+RSpec.describe 'Games', type: :request do
+  describe 'GET /index' do
+    it 'returns http success' do
+      get '/games/index'
       expect(response).to have_http_status(:success)
     end
   end
 
-  describe "GET /show" do
-    it "returns http success" do
-      get "/games/show"
+  describe 'GET /show' do
+    it 'returns http success' do
+      get '/games/show'
       expect(response).to have_http_status(:success)
     end
   end
 
-  describe "GET /new" do
-    it "returns http success" do
-      get "/games/new"
+  describe 'GET /new' do
+    it 'returns http success' do
+      get '/games/new'
       expect(response).to have_http_status(:success)
     end
   end
 
-  describe "GET /create" do
-    it "returns http success" do
-      get "/games/create"
+  describe 'GET /create' do
+    it 'returns http success' do
+      get '/games/create'
       expect(response).to have_http_status(:success)
     end
   end
 
-  describe "GET /edit" do
-    it "returns http success" do
-      get "/games/edit"
+  describe 'GET /edit' do
+    it 'returns http success' do
+      get '/games/edit'
       expect(response).to have_http_status(:success)
     end
   end
 
-  describe "GET /update" do
-    it "returns http success" do
-      get "/games/update"
+  describe 'GET /update' do
+    it 'returns http success' do
+      get '/games/update'
       expect(response).to have_http_status(:success)
     end
   end
 
-  describe "GET /destroy" do
-    it "returns http success" do
-      get "/games/destroy"
+  describe 'GET /destroy' do
+    it 'returns http success' do
+      get '/games/destroy'
       expect(response).to have_http_status(:success)
     end
   end
-
 end
