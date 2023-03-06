@@ -24,7 +24,7 @@ class PlayersController < ApplicationController
 
   def destroy; end
 
-  private 
+  private
 
   def player_params
     params.require(:player).permit(:name, :description, :rank)
