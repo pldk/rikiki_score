@@ -56,4 +56,4 @@ jobs:
       - name: Install dependencies
         run: bundle install
       - name: Rubocop
-        run: rubocop -A
+        run: rubocop -A --parallel
