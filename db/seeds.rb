@@ -6,3 +6,7 @@
 #
 #   movies = Movie.create([{ name: "Star Wars" }, { name: "Lord of the Rings" }])
 #   Character.create(name: "Luke", movie: movies.first)
+players = Player.create([{ name: "Doud", description: Faker::Quote.jack_handey},
+                        { name: "Gad", description: Faker::Quote.jack_handey},
+                        { name: "Pipe", description: Faker::Quote.jack_handey},
+                        { name: "Tommy", description: Faker::Quote.jack_handey}])
