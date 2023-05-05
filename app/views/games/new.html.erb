@@ -1,4 +1,13 @@
-<div>
-  <h1 class="font-bold text-4xl">Games#new</h1>
-  <p>Find me in app/views/games/new.html.erb</p>
+
+<div class="container">
+  <div class="bg-white text-center">
+    <h1 class="text-4xl font-bold text-gray-900">Start a new game</h1>
+    <br>
+    <p class="text-2xl font-bold tracking-tight text-gray-900">Select the players</p>
+    <br>
+    <%= simple_form_for @game do |f| %>
+      <%= f.association :players, collection: Player.all, label: false %>
+      <%= f.button :submit, class: "btn btn-success"%>
+    <% end %>
+</div>
 </div>

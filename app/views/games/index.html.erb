@@ -1,4 +1,33 @@
-<div>
-  <h1 class="font-bold text-4xl">Games#index</h1>
-  <p>Find me in app/views/games/index.html.erb</p>
+<div class="container">
+  <div class="w-full max-w-md  mx-auto">
+    <h1 class="text-4xl font-bold underline">Select a player</h1>
+  </div>
+  <br>
+  <!-- component -->
+  <section class="bg-white dark:bg-gray-900"> 
+    <div class="container px-6 py-10 mx-auto">
+      <div class="grid grid-cols-1 gap-8 mt-8 xl:mt-12 xl:gap-12 sm:grid-cols-2 xl:grid-cols-4 lg:grid-cols-3">
+        <!-- This is an example component -->
+        <% @players.each do |player| %>
+          <div class='w-full max-w-md  mx-auto bg-white rounded-3xl shadow-xl overflow-hidden'>
+            <div class=''>
+              <div class='font-bold p-4 sm:p-6'>
+                <div class="text-center">
+                  <%= player.name %></p>
+                </div>
+                <div class='flex flex-row'>
+                  <p class='text-[17px] font-bold text-[#0FB478]'><%= player.rank %></p>
+                </div>
+                <p class='text-[#7C7C80] font-[15px] mt-6'><%= player.description %></p>
+                <div class="bottom">
+                  <%= link_to "Add player", game_add_player_path(player), class: 'btn-primary block mt-1.5 w-full px-4 py-3 font-medium tracking-wide text-center capitalize transition-colors duration-300 transform rounded-[14px] hover:bg-[lightblue] hover:text-[#000000dd] focus:outline-none focus:ring focus:ring-teal-300 focus:ring-opacity-80' %>
+                </div>
+              </div>
+            </div>
+          </div>
+          <br>
+        <% end %>
+      </div>
+    </div>
+  </section>
 </div>
