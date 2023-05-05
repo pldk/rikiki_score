@@ -2,7 +2,8 @@
 
 class Game < ApplicationRecord
   has_many :rounds
-  has_many :players, through: :rounds
+  has_many :players
+  accepts_nested_attributes_for :players, reject_if: ->(attributes){ attributes['username'].blank? }, allow_destroy: true
 
   enum status: {
     active: 0,
@@ -10,13 +11,5 @@ class Game < ApplicationRecord
   }
 
   enum style: %w[long short]
-  # enum stars_enhanced: %w[true false]
-
-  def long_rounds
-    52 / players.size * 2 - 1 + players.size - 1
-  end
-
-  def short_rounds
-    52 / players.size * 2 - 1
-  end
+  enum stars: %w[true false]
 end
