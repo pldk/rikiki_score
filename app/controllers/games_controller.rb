@@ -24,6 +24,6 @@ class GamesController < ApplicationController
   private
 
   def game_params
-    params.require(:game).permit(:status, :style)
+    params.require(:game).permit(:status, :style, player_ids: [])
   end
 end
