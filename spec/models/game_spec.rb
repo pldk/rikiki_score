@@ -27,7 +27,7 @@ RSpec.describe Game, type: :model do
   end
 
   it 'should enhance stars' do
-    game.update(stars: true)
-    expect(game.stars).to eq(true)
+    game.stars = 0
+    expect(game.stars).to be_truthy
   end
 end

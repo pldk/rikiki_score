@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 class PlayersController < ApplicationController
+  before_action :set_player, only: [:show, :edit, :update, :destroy]
   def index
     @players = Player.all
   end
@@ -30,5 +31,9 @@ class PlayersController < ApplicationController
 
   def player_params
     params.require(:player).permit(:name, :description, :rank)
+  end
+
+  def set_player
+    @player = Player.find(params[:id])
   end
 end

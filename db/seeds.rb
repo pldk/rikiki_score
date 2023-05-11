@@ -6,7 +6,11 @@
 #
 #   movies = Movie.create([{ name: "Star Wars" }, { name: "Lord of the Rings" }])
 #   Character.create(name: "Luke", movie: movies.first)
-players = Player.create([{ name: "Doud", description: Faker::Quote.jack_handey},
+players = Player.create([{ name: "Cress", description: Faker::Quote.jack_handey},
+                        { name: "Charly", description: Faker::Quote.jack_handey},
+                        { name: "Doud", description: Faker::Quote.jack_handey},
                         { name: "Gad", description: Faker::Quote.jack_handey},
+                        { name: "Mat", description: Faker::Quote.jack_handey},
                         { name: "Pipe", description: Faker::Quote.jack_handey},
-                        { name: "Tommy", description: Faker::Quote.jack_handey}])
+                        { name: "Tommy", description: Faker::Quote.jack_handey},
+                        { name: "Toony", description: Faker::Quote.jack_handey}])

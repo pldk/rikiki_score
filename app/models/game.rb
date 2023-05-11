@@ -2,8 +2,8 @@
 
 class Game < ApplicationRecord
   has_many :rounds
-  has_many :players
-  accepts_nested_attributes_for :players, reject_if: ->(attributes){ attributes['username'].blank? }, allow_destroy: true
+  has_many :players, through: :rounds
+  # accepts_nested_attributes_for :players, reject_if: ->(attributes){ attributes['username'].blank? }
 
   enum status: {
     active: 0,
