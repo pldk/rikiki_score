@@ -12,7 +12,8 @@
 #  updated_at  :datetime         not null
 #
 class Player < ApplicationRecord
-  has_many :rounds
+  has_many :predictions
+  has_many :rounds, through: :predictions
   has_many :games, through: :rounds
 
   def games_played

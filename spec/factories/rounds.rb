@@ -5,21 +5,20 @@
 # Table name: rounds
 #
 #  id         :bigint           not null, primary key
+#  has_trump  :boolean          default(TRUE)
 #  length     :integer
+#  phase      :integer          default(0)
 #  created_at :datetime         not null
 #  updated_at :datetime         not null
 #  game_id    :bigint           not null
-#  player_id  :bigint           not null
 #
 # Indexes
 #
-#  index_rounds_on_game_id    (game_id)
-#  index_rounds_on_player_id  (player_id)
+#  index_rounds_on_game_id  (game_id)
 #
 # Foreign Keys
 #
 #  fk_rails_...  (game_id => games.id)
-#  fk_rails_...  (player_id => players.id)
 #
 FactoryBot.define do
   factory :round do

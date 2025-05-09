@@ -12,7 +12,7 @@ class GamesController < ApplicationController
     @game = Game.new
   end
 
-  def create 
+  def create
     @game = Game.new(game_params)
   end
 
