@@ -1,4 +1,25 @@
-<div>
-  <h1 class="font-bold text-4xl">Rounds#show</h1>
-  <p>Find me in app/views/rounds/show.html.erb</p>
-</div>
+<h1>Manche #<%= @round.position + 1 %></h1>
+<table>
+  <thead>
+    <tr>
+      <th>Joueur</th>
+      <th>Annonce</th>
+      <th>Réalisé</th>
+      <th>Star</th>
+      <th>Score</th>
+      <th>Action</th>
+    </tr>
+  </thead>
+  <tbody>
+    <% @predictions.each do |p| %>
+      <tr>
+        <td><%= p.player.name %></td>
+        <td><%= p.predicted_tricks || "-" %></td>
+        <td><%= p.actual_tricks || "-" %></td>
+        <td><%= p.is_star ? "⭐️" : "" %></td>
+        <td><%= p.score || "-" %></td>
+        <td><%= link_to "Modifier", edit_round_prediction_path(@round, p) %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>

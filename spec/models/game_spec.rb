@@ -6,7 +6,7 @@
 #
 #  id         :bigint           not null, primary key
 #  stars      :boolean          default(FALSE)
-#  status     :integer          default("active")
+#  status     :integer          default(NULL)
 #  style      :integer
 #  created_at :datetime         not null
 #  updated_at :datetime         not null

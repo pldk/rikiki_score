@@ -12,9 +12,15 @@
 #  updated_at  :datetime         not null
 #
 class Player < ApplicationRecord
+  after_update_commit :capitalize_name
+
   has_many :predictions
   has_many :rounds, through: :predictions
-  has_many :games, through: :rounds
+
+  has_many :game_players, dependent: :destroy
+  has_many :games, through: :game_players
+
+  validates :name, presence: true
 
   def games_played
     games.size
@@ -26,5 +32,9 @@ class Player < ApplicationRecord
 
   def games_won
     games.size
+  end
+
+  def capitalize_name
+    name.capitalize if name.present?
   end
 end

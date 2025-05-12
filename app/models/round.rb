@@ -8,6 +8,7 @@
 #  has_trump  :boolean          default(TRUE)
 #  length     :integer
 #  phase      :integer          default(0)
+#  position   :integer
 #  created_at :datetime         not null
 #  updated_at :datetime         not null
 #  game_id    :bigint           not null
@@ -24,4 +25,11 @@ class Round < ApplicationRecord
   belongs_to :game
   has_many :predictions
   has_many :players, through: :predictions
+
+  def phase
+    mid = game.rounds.count / 2.0
+    self_index = game.rounds.order(:created_at).pluck(:id).index(id)
+
+    self_index < mid ? 'ascending' : 'descending'
+  end
 end

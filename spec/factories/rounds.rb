@@ -8,6 +8,7 @@
 #  has_trump  :boolean          default(TRUE)
 #  length     :integer
 #  phase      :integer          default(0)
+#  position   :integer
 #  created_at :datetime         not null
 #  updated_at :datetime         not null
 #  game_id    :bigint           not null

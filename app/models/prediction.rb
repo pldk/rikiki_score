@@ -33,6 +33,8 @@ class Prediction < ApplicationRecord
 
   validate :only_one_star_per_phase
 
+  before_create :assign_position
+
   def only_one_star_per_phase
     return unless is_star
 
@@ -69,5 +71,11 @@ class Prediction < ApplicationRecord
 
   def self.calculate_round_scores(round_id)
     where(round_id: round_id).each(&:calculate_score)
+  end
+
+  def phase
+    total_rounds = game.total_rounds
+    midpoint = (total_rounds / 2.0).floor
+    position < midpoint ? 'ascending' : 'descending'
   end
 end

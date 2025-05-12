@@ -1,4 +1,5 @@
-<div>
-  <h1 class="font-bold text-4xl">Rounds#new</h1>
-  <p>Find me in app/views/rounds/new.html.erb</p>
-</div>
+<h1>Nouvelle manche</h1>
+<%= form_with model: @round, url: game_rounds_path(@game) do |f| %>
+  <div><%= f.label :length %><%= f.number_field :length %></div>
+  <%= f.submit "Créer", class: "btn btn-success" %>
+<% end %>
