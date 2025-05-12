@@ -26,6 +26,8 @@ class Round < ApplicationRecord
   has_many :predictions
   has_many :players, through: :predictions
 
+  accepts_nested_attributes_for :predictions
+
   def phase
     mid = game.rounds.count / 2.0
     self_index = game.rounds.order(:created_at).pluck(:id).index(id)

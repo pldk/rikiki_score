@@ -2,7 +2,7 @@
 
 class PlayersController < ApplicationController
   before_action :set_player, only: %i[show edit update destroy]
-  # before_action :set_game, only: %i[new create]
+  before_action :set_game, only: %i[new create]
   def index
     @players = Player.all
   end
@@ -14,11 +14,14 @@ class PlayersController < ApplicationController
   end
 
   def create
-    @game = Game.new
     @player = Player.new(player_params)
-    if @player.save
-      @game.players << @player unless @game.players.include?(@player)
-      redirect_to @game
+    if @player.save 
+      game.players << @player unless game.players.include?(@player)
+
+      respond_to do |format|
+        format.turbo_stream
+        format.html { redirect_to edit_game_path(game), notice: "Joueur créé et ajouté à la partie." }
+      end
     else
       render :new
     end

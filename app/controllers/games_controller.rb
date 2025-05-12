@@ -42,7 +42,7 @@ class GamesController < ApplicationController
 
   def start
     if @game.players.count < 3
-      redirect_to edit_game_path(@game), alert: "Il faut au moins 3 joueurs pour commencer une partie."
+      redirect_to edit_game_path(@game), alert: 'Il faut au moins 3 joueurs pour commencer une partie.'
       return
     end
 
@@ -50,7 +50,7 @@ class GamesController < ApplicationController
 
     first_round = @game.rounds.create!(
       position: 1,
-      phase: :ascending, # ou une méthode pour le déterminer
+      phase: :ascending # ou une méthode pour le déterminer
     )
 
     # Crée une participation vide pour chaque joueur
@@ -58,7 +58,7 @@ class GamesController < ApplicationController
       first_round.predictions.create!(player: player)
     end
 
-    redirect_to game_round_path(@game, first_round), notice: "La partie a commencé !"
+    redirect_to game_round_path(@game, first_round), notice: 'La partie a commencé !'
   end
 
   def destroy; end

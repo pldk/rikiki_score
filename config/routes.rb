@@ -7,10 +7,10 @@ Rails.application.routes.draw do
     member do
       post :start
     end
-    
-    resources :players, only: [:create, :destroy], controller: 'games/players'
-    resources :rounds, only: [:index, :new, :create, :show] do
-      resources :predictions, only: [:edit, :update]
+
+    resources :players, only: %i[create destroy], controller: 'games/players'
+    resources :rounds, only: %i[index new create show] do
+      resources :predictions, only: %i[edit update]
     end
   end
   resources :players, only: [:create]

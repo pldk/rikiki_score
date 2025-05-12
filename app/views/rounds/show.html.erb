@@ -1,25 +1,59 @@
-<h1>Manche #<%= @round.position + 1 %></h1>
-<table>
-  <thead>
-    <tr>
-      <th>Joueur</th>
-      <th>Annonce</th>
-      <th>Réalisé</th>
-      <th>Star</th>
-      <th>Score</th>
-      <th>Action</th>
-    </tr>
-  </thead>
-  <tbody>
-    <% @predictions.each do |p| %>
-      <tr>
-        <td><%= p.player.name %></td>
-        <td><%= p.predicted_tricks || "-" %></td>
-        <td><%= p.actual_tricks || "-" %></td>
-        <td><%= p.is_star ? "⭐️" : "" %></td>
-        <td><%= p.score || "-" %></td>
-        <td><%= link_to "Modifier", edit_round_prediction_path(@round, p) %></td>
-      </tr>
-    <% end %>
-  </tbody>
-</table>
+<h1 class="text-2xl font-bold mb-6">Manche #<%= @round.position %></h1>
+
+<div class="max-w-full overflow-x-auto">
+  <%= simple_form_for [:game, @round], url: game_round_path(@game, @round), method: :patch do |f| %>
+    <table class="min-w-full border border-gray-300 shadow rounded-lg text-center bg-white">
+      <thead class="bg-gray-100">
+        <tr>
+          <th class="px-4 py-3 text-left">#</th>
+          <th class="px-4 py-3"><i class="fa fa-calculator"></i></th>
+          <% @players.each do |player| %>
+            <th class="px-4 py-3"><%= player.name %></th>
+          <% end %>
+          <th class="px-4 py-3"><i class="fas fa-pencil-square"></i></th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr class="border-t">
+          <td class="px-4 py-3 font-semibold text-left"><%= @round.id %></td>
+          <td class="px-4 py-3"><%= @round.position %></td>
+
+          <% @players.each do |player| %>
+            <% prediction = @predictions.find { |p| p.player_id == player.id } %>
+            <td class="px-2 py-3">
+              <div class="flex flex-col items-center space-y-2">
+                <%= number_field_tag "predictions[#{prediction.id}][predicted_tricks]",
+                                     prediction.predicted_tricks,
+                                     class: "w-20 text-center border border-gray-300 rounded-md py-1 px-2 focus:ring focus:outline-none",
+                                     placeholder: "Annonce" %>
+
+                <%= number_field_tag "predictions[#{prediction.id}][actual_tricks]",
+                                     prediction.actual_tricks,
+                                     class: "w-20 text-center border border-gray-300 rounded-md py-1 px-2 focus:ring focus:outline-none",
+                                     placeholder: "Réalisé" %>
+
+                <span class="font-semibold text-sm text-gray-800">
+                  <%= prediction.score || "-" %>
+                </span>
+
+                <label class="inline-flex items-center">
+                  <%= check_box_tag "predictions[#{prediction.id}][is_star]",
+                                    true,
+                                    prediction.is_star,
+                                    class: "form-checkbox h-4 w-4 text-indigo-600 transition duration-150 ease-in-out" %>
+                  <span class="ml-2 text-sm">⭐</span>
+                </label>
+              </div>
+            </td>
+          <% end %>
+
+          <td class="px-4 py-3">
+            <button type="submit" class="bg-indigo-600 hover:bg-indigo-700 text-white text-sm font-medium px-4 py-2 rounded-md shadow">
+              <i class="fas fa-save mr-1"></i> Enregistrer
+            </button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  <% end %>
+</div>

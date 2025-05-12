@@ -14,7 +14,8 @@
 class Game < ApplicationRecord
   has_many :rounds
   has_many :predictions, through: :rounds
-
+  accepts_nested_attributes_for :rounds
+  
   has_many :game_players, dependent: :destroy
   has_many :players, through: :game_players
 
@@ -29,7 +30,7 @@ class Game < ApplicationRecord
   enum style: { long: 0, short: 1 }
 
   def total_rounds
-   long? ? long_rounds : short_rounds
+    long? ? long_rounds : short_rounds
   end
 
   def long_rounds

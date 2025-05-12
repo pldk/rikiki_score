@@ -7,7 +7,7 @@ require 'active_support/core_ext/integer/time'
 # your test database is "scratch space" for the test suite and is wiped
 # and recreated between test runs. Don't rely on the data there!
 
-Rails.application.configure
+Rails.application.configure do
 # Settings specified here will take precedence over those in config/application.rb.
 
 # Turn false under Spring and add config.action_view.cache_template_loading = true.
@@ -40,6 +40,8 @@ config.active_storage.service = :test
 
 config.action_mailer.perform_caching = false
 
+config.hosts << 'example.com'
+
 # Tell Action Mailer not to deliver emails to the real world.
 # The :test delivery method accumulates sent emails in the
 # ActionMailer::Base.deliveries array.
@@ -59,3 +61,4 @@ config.active_support.disallowed_deprecation_warnings = []
 
 # Annotate rendered view with file names.
 # config.action_view.annotate_rendered_view_with_filenames = true
+end

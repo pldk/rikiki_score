@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # == Schema Information
 #
 # Table name: predictions
@@ -27,8 +29,8 @@ class Prediction < ApplicationRecord
   belongs_to :round
   belongs_to :player
 
-  validates :predicted_tricks, presence: true
-  validates :actual_tricks, presence: true
+  # validates :predicted_tricks, presence: truetot
+  # validates :actual_trickstot
   validates :score, presence: true
 
   validate :only_one_star_per_phase
@@ -40,15 +42,15 @@ class Prediction < ApplicationRecord
 
     current_phase = round.phase
     existing_star = Prediction
-                      .joins(:round)
-                      .where(player_id: player_id, is_star: true)
-                      .where(rounds: { phase: current_phase })
-                      .where.not(id: id)
-                      .exists?
+                    .joins(:round)
+                    .where(player_id: player_id, is_star: true)
+                    .where(rounds: { phase: current_phase })
+                    .where.not(id: id)
+                    .exists?
 
-    if existing_star
-      errors.add(:is_star, "déjà utilisée pour cette phase")
-    end
+    return unless existing_star
+
+    errors.add(:is_star, 'déjà utilisée pour cette phase')
   end
 
   def calculate_score
@@ -73,6 +75,9 @@ class Prediction < ApplicationRecord
     where(round_id: round_id).each(&:calculate_score)
   end
 
+  def assign_position
+    position = round.position
+  end
   def phase
     total_rounds = game.total_rounds
     midpoint = (total_rounds / 2.0).floor

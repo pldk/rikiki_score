@@ -27,7 +27,7 @@ class Player < ApplicationRecord
   end
 
   def rank
-    games.size
+    games.size 
   end
 
   def games_won

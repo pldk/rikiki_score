@@ -3,7 +3,7 @@
 source 'https://rubygems.org'
 git_source(:github) { |repo| "https://github.com/#{repo}.git" }
 
-ruby '3.1.2'
+ruby '3.3.5'
 
 # Bundle edge Rails instead: gem "rails", github: "rails/rails", branch: "main"
 gem 'rails', '>= 7.1'
@@ -58,7 +58,10 @@ group :development, :test do
   gem 'debug', platforms: %i[mri mingw x64_mingw]
   gem 'factory_bot_rails'
   gem 'faker'
-  gem 'rspec-rails', '~> 6.0.0'
+  gem 'simple_form'
+  gem 'simple_form-tailwind'
+
+  gem 'rspec-rails', '~> 8.0.0'
   gem 'rubocop-rails', require: false
 end
 
@@ -77,6 +80,5 @@ group :development do
   # gem "spring"
   gem 'annotate'
   gem 'font-awesome-sass', '~> 6.0.0'
-  gem 'simple_form'
-  gem 'simple_form-tailwind'
 end
+

@@ -15,30 +15,35 @@ require 'rails_helper'
 
 RSpec.describe Game, type: :model do
   let(:game) { Game.new(style: 'short') }
+  let(:players) { Array.new(4) { Player.create!(name: Faker::Name.first_name) } }
+
   it 'should not be valid without players' do
     expect(game.players).to be_empty
   end
-  let(:players) { Array.new(4) { Player.new } }
+
   it 'should contain players' do
-    game.players = players
+    game.save!
+    game.players << players
     expect(game.players.size).to eq(4)
   end
 
   it 'should be a short game' do
-    expect(game.style).to be('short')
+    expect(game.style).to eq('short')
   end
+
+  let(:long_game) { Game.new(style: 'long') }
 
   it 'should be a long game' do
-    game.update(style: 'long')
-    expect(game.style).to be('long')
+    expect(long_game.style).to eq('long')
   end
 
-  it 'should disable stars' do
+  it 'should disable stars by default' do
     expect(game.stars).to be_falsey
   end
 
   it 'should enhance stars' do
-    game.stars = 0
+    game.stars = true
     expect(game.stars).to be_truthy
   end
 end
+

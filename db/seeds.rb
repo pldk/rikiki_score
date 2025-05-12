@@ -14,6 +14,6 @@ Player.create([
                 { name: 'Gad', description: Faker::Quote.jack_handey },
                 # { name: 'Mat', description: Faker::Quote.jack_handey },
                 { name: 'Pipo', description: Faker::Quote.jack_handey },
-                { name: 'Tom', description: Faker::Quote.jack_handey },
+                { name: 'Tom', description: Faker::Quote.jack_handey }
                 # { name: 'Toony', description: Faker::Quote.jack_handey }
               ])

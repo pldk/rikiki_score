@@ -1,0 +1,7 @@
+<h1>Saisie prédiction pour <%= @prediction.player.name %></h1>
+<%= form_with model: @prediction, url: prediction_path(@prediction), method: :put do |f| %>
+  <div><%= f.label :predicted_tricks %><%= f.number_field :predicted_tricks %></div>
+  <div><%= f.label :actual_tricks %><%= f.number_field :actual_tricks %></div>
+  <div><%= f.label :is_star %><%= f.check_box :is_star %></div>
+  <%= f.submit "Enregistrer", class: "btn btn-success" %>
+<% end %>
