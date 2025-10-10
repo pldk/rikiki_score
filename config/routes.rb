@@ -9,7 +9,7 @@ Rails.application.routes.draw do
     end
 
     resources :players, only: %i[create destroy], controller: 'games/players'
-    resources :rounds, only: %i[index new create show] do
+    resources :rounds, except: %i[destroy] do
       resources :predictions, only: %i[edit update]
     end
   end

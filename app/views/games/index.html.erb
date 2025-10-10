@@ -1,6 +1,8 @@
 <div class="container">
-  <h1>Parties en cours</h1>
-  <%= link_to 'Nouvelle partie', new_game_path, class: "btn btn-primary" %>
+  <h1 class="mb-4 text-4xl font-extrabold leading-none tracking-tight text-gray-900 md:text-5xl lg:text-6xl dark:text-white">Parties en cours</h1>
+  <%= link_to 'Nouvelle partie', new_game_path, 
+    class: "btn font-medium text-blue-600 dark:text-blue-500 hover:underline" 
+  %>
   <ul>
     <% @games.each do |game| %>
       <li><%= link_to "Partie ##{game.id}", game_path(game) %></li>

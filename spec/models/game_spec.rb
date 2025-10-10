@@ -46,4 +46,3 @@ RSpec.describe Game, type: :model do
     expect(game.stars).to be_truthy
   end
 end
-

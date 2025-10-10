@@ -8,12 +8,12 @@
 #   movies = Movie.create([{ name: "Star Wars" }, { name: "Lord of the Rings" }])
 #   Character.create(name: "Luke", movie: movies.first)
 Player.create([
-                # { name: 'Cress', description: Faker::Quote.jack_handey },
-                # { name: 'Charly', description: Faker::Quote.jack_handey },
+                { name: 'Cress', description: Faker::Quote.jack_handey },
+                { name: 'Charly', description: Faker::Quote.jack_handey },
                 { name: 'Doud', description: Faker::Quote.jack_handey },
                 { name: 'Gad', description: Faker::Quote.jack_handey },
-                # { name: 'Mat', description: Faker::Quote.jack_handey },
+                { name: 'Mat', description: Faker::Quote.jack_handey },
                 { name: 'Pipo', description: Faker::Quote.jack_handey },
-                { name: 'Tom', description: Faker::Quote.jack_handey }
-                # { name: 'Toony', description: Faker::Quote.jack_handey }
+                { name: 'Tom', description: Faker::Quote.jack_handey },
+                { name: 'Tony', description: Faker::Quote.jack_handey }
               ])

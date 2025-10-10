@@ -12,9 +12,9 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 20_250_512_125_936) do
+ActiveRecord::Schema[8.0].define(version: 20_250_512_125_936) do
   # These are extensions that must be enabled in order to support this database
-  enable_extension 'plpgsql'
+  enable_extension 'pg_catalog.plpgsql'
 
   create_table 'game_players', force: :cascade do |t|
     t.bigint 'game_id', null: false

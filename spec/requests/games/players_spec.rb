@@ -7,7 +7,7 @@ RSpec.describe 'Games::Players', type: :request do
 
   let!(:game) { Game.create!(style: 'short') }
   let!(:player) { Player.create!(name: 'Alice') }
-  
+
   describe 'POST /games/:game_id/players' do
     it 'adds a player to the game and redirects' do
       post game_players_path(game), params: { player_id: player.id }

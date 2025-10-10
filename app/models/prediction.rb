@@ -76,8 +76,9 @@ class Prediction < ApplicationRecord
   end
 
   def assign_position
-    position = round.position
+    round.position
   end
+
   def phase
     total_rounds = game.total_rounds
     midpoint = (total_rounds / 2.0).floor

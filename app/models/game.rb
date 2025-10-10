@@ -15,19 +15,19 @@ class Game < ApplicationRecord
   has_many :rounds
   has_many :predictions, through: :rounds
   accepts_nested_attributes_for :rounds
-  
+
   has_many :game_players, dependent: :destroy
   has_many :players, through: :game_players
 
   accepts_nested_attributes_for :players, reject_if: ->(attributes) { attributes['username'].blank? }
 
-  enum status: {
+  enum :status, {
     0 => :pending,
     1 => :active,
     2 => :finished
   }
 
-  enum style: { long: 0, short: 1 }
+  enum :style, { long: 0, short: 1 }
 
   def total_rounds
     long? ? long_rounds : short_rounds

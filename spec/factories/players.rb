@@ -4,13 +4,14 @@
 #
 # Table name: players
 #
-#  id          :bigint           not null, primary key
-#  description :string
+#  id          :integer          not null, primary key
 #  name        :string
+#  description :string
 #  rank        :integer
 #  created_at  :datetime         not null
 #  updated_at  :datetime         not null
 #
+
 FactoryBot.define do
   factory :player do
     name { 'MyString' }

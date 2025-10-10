@@ -1,0 +1,7 @@
+<%= turbo_stream.replace "selected_players",
+      partial: "games/selected_players",
+      locals: { game: @game } %>
+
+<%= turbo_stream.replace "available_players",
+      partial: "games/available_players",
+      locals: { game: @game, players: Player.all } %>

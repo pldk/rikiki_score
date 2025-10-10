@@ -36,18 +36,7 @@
     <!-- Liste des joueurs -->
     <div>
       <h3 class="text-lg font-semibold mb-4">Ajouter un joueur existant</h3>
-      <div class="grid gap-4 sm:grid-cols-2">
-        <% (@players - @game.players).each do |player| %>
-          <div class="bg-gray-50 p-4 rounded-xl shadow">
-            <h4 class="font-bold text-gray-800"><%= player.name %></h4>
-            <p class="text-sm text-gray-600"><%= player.description.presence || "Aucune description" %></p>
-            <%= button_to "Ajouter", game_players_path(@game, player_id: player.id),
-                method: :post,
-                form: { data: { turbo_stream: true, turbo_frame: "selected_players" } },
-                class: "mt-3 w-full bg-green-500 text-white py-1.5 rounded hover:bg-green-600" %>
-          </div>
-        <% end %>
-      </div>
+      <%= render 'available_players', game: @game, players: @players %>
     </div>
   </div>
 </div>

@@ -14,16 +14,19 @@ class PlayersController < ApplicationController
   end
 
   def create
-    @player = Player.new(player_params)
-    if @player.save 
-      game.players << @player unless game.players.include?(@player)
-
-      respond_to do |format|
-        format.turbo_stream
-        format.html { redirect_to edit_game_path(game), notice: "Joueur créé et ajouté à la partie." }
-      end
+    if params[:player_id].present?
+      # Ajout d'un joueur existant
+      @player = Player.find(params[:player_id])
+      @game.players << @player unless @game.players.include?(@player)
     else
-      render :new
+      # Création d'un nouveau joueur
+      @player = Player.create(player_params)
+      @game.players << @player if @player.save
+    end
+
+    respond_to do |format|
+      format.turbo_stream
+      format.html { redirect_to @game }
     end
   end
 
@@ -31,7 +34,15 @@ class PlayersController < ApplicationController
 
   def update; end
 
-  def destroy; end
+  def destroy
+    @player = @game.players.find(params[:id])
+    @game.players.destroy(@player)
+
+    respond_to do |format|
+      format.turbo_stream
+      format.html { redirect_to @game }
+    end
+  end
 
   private
 

@@ -1,6 +1,6 @@
 <%= turbo_frame_tag "selected_players" do %>
   <% if @game.players.any? %>
-    <ul class="divide-y">
+    <ul class="divide-y divide-gray-200">
       <% @game.players.each do |player| %>
         <li class="py-2 text-center text-gray-800 font-medium flex justify-between items-center">
           <span><%= player.name %></span>
