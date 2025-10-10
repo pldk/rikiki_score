@@ -1,0 +1,23 @@
+<div>
+  <h1>Joueurs</h1>
+  <%= render 'selected_players', game: @game %>
+  <table>
+    <thead>
+      <tr>
+        <th>Nom</th>
+        <th>Description</th>
+        <th>Rang</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% @players.each do |player| %>
+        <tr>
+          <td><%= player.name %></td>
+          <td><%= player.description %></td>
+          <td><%= player.rank %></td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+  <%= link_to 'Ajouter un joueur', game_players_path(@game), class: "btn" %>
+</div>

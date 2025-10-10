@@ -2,6 +2,11 @@
 
 module Games
   class PlayersController < ApplicationController
+    def index
+      @game = Game.find(params[:game_id])
+      @players = @game.players
+    end
+
     def create
       @game = Game.find(params[:game_id])
       player = Player.find(params[:player_id])
