@@ -23,8 +23,8 @@ class PredictionsController < ApplicationController
   end
 
   def update
-    if @prediction.update(prediction_params)
-    end
+    return unless @prediction.update(prediction_params)
+
     render turbo_stream: turbo_stream.replace(
       "prediction_#{@prediction.round_id}_#{@prediction.player_id}",
       partial: 'predictions/form_actual',
