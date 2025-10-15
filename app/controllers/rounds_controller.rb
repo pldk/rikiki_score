@@ -17,14 +17,14 @@ class RoundsController < ApplicationController
       @game.players.each do |player|
         Prediction.create(round: @round, player: player)
       end
-      redirect_to game_round_path(@game, @round)
+      redirect_to game_rounds_path(@game)
     else
       render :new
     end
   end
 
   def show
-    @round = @game.rounds.find(params[:id])
+    @round = Round.find(params[:id])
     @players = @game.players.order(:id)
     @predictions = @round.predictions.includes(:player)
   end

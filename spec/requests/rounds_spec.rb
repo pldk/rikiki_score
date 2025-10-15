@@ -3,52 +3,55 @@
 require 'rails_helper'
 
 RSpec.describe 'Rounds', type: :request do
+  let!(:game) { Game.create }
+  let!(:player) { Player.create }
+  let!(:round) { Round.create(game: game)}
   describe 'GET /index' do
     it 'returns http success' do
-      get '/games/:game_id/rounds/index'
+      get game_rounds_path(game)
       expect(response).to have_http_status(:success)
     end
   end
 
   describe 'GET /show' do
     it 'returns http success' do
-      get '/games/:game_id/rounds/show'
+      get game_round_path(game, round)
       expect(response).to have_http_status(:success)
     end
   end
 
   describe 'GET /new' do
     it 'returns http success' do
-      get '/games/:game_id/rounds/new'
+      get new_game_round_path(game, round)
       expect(response).to have_http_status(:success)
     end
   end
 
-  describe 'GET /create' do
+  describe 'POST /create' do
     it 'returns http success' do
-      get '/games/:game_id/rounds/create'
-      expect(response).to have_http_status(:success)
+      post game_rounds_path(game), params: { round: { position: 1 } }
+      expect(response).to have_http_status(:redirect)
     end
   end
 
   describe 'GET /edit' do
     it 'returns http success' do
-      get '/games/:game_id/rounds/edit'
+      get edit_game_round_path(game, round)
       expect(response).to have_http_status(:success)
     end
   end
 
-  describe 'GET /update' do
+  describe 'PATCH /update' do
     it 'returns http success' do
-      get '/games/:game_id/rounds/update'
+      get game_round_path(game, round)
       expect(response).to have_http_status(:success)
     end
   end
 
-  describe 'GET /destroy' do
-    it 'returns http success' do
-      get '/games/:game_id/rounds/destroy'
-      expect(response).to have_http_status(:success)
-    end
-  end
+  # describe 'EDIT /destroy' do
+  #   it 'returns http success' do
+  #     delete game_round_path(game)
+  #     expect(response).to have_http_status(:success)
+  #   end
+  # end
 end

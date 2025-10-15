@@ -2,14 +2,13 @@
 
 <h2>Joueurs</h2>
 <ul>
-  <% @players.each do |player| %>
+  <% @game.players.each do |player| %>
     <li><%= player.name %></li>
   <% end %>
 </ul>
 <%= link_to 'Ajouter un joueur', game_players_path(@game), class: "btn" %>
 
 <h2>Manches</h2>
-<%= link_to 'Nouvelle manche', new_game_round_path(@game), class: "btn btn-warning" %>
 <ul>
   <% @rounds.each do |round| %>
     <li><%= link_to "Manche #{round.position + 1} (#{round.length} cartes)", game_round_path(@game, round) %></li>

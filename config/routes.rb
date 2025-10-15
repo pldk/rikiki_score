@@ -9,9 +9,11 @@ Rails.application.routes.draw do
     end
 
     resources :players, only: %i[index create destroy], controller: 'games/players'
+
     resources :rounds, except: %i[destroy] do
-      resources :predictions, only: %i[edit update]
+      resources :predictions, only: %i[index create edit update]
     end
   end
-  resources :players, only: [:create]
+
+  resources :players, only: %i[index show new create]
 end

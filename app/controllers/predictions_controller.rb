@@ -3,14 +3,16 @@
 class PredictionsController < ApplicationController
   def edit
     @round = Round.find(params[:round_id])
-    @game = @round.game
-    @prediction = Prediction.find_by(round_id: @round.id, player_id: params[:id])
+    @game = Game.find(params[:game_id])
+    @prediction = Prediction.find(params[:id])
+    @player = @prediction.player
+
   end
 
   def update
     @prediction = Prediction.find(params[:id])
     if @prediction.update(prediction_params)
-      @prediction.update(score: @prediction.compute_score)
+      # @prediction.update(score: @prediction.compute_score)
       redirect_to game_round_path(@prediction.round.game, @prediction.round)
     else
       render :edit

@@ -1,17 +1,15 @@
 # frozen_string_literal: true
 
 class GamesController < ApplicationController
-  before_action :set_game, only: %i[show edit update destroy start]
+  before_action :set_game, only: %i[show edit update destroy]
   def index
     @games = Game.all
-    @players = Player.all
   end
 
   def show
-    @game = Game.find(params[:id])
-    @players = Player.all
-    # @game_players = @game.players
-    @rounds = @game.rounds.order(:position)
+    @game_players = @game.players
+    @remaining_players = Player.all - @game.players
+    @rounds = @game.rounds
   end
 
   def new
@@ -21,18 +19,15 @@ class GamesController < ApplicationController
   def create
     @game = Game.new(game_params)
     if @game.save
-      redirect_to edit_game_path(@game)
+      redirect_to game_players_path(@game)
     else
       render :new
     end
   end
 
-  def edit
-    @players = Player.all
-  end
+  def edit; end
 
   def update
-    @players = Player.all
     if @game.update(game_params)
       redirect_to @game
     else
@@ -40,28 +35,10 @@ class GamesController < ApplicationController
     end
   end
 
-  def start
-    if @game.players.count < 3
-      redirect_to edit_game_path(@game), alert: 'Il faut au moins 3 joueurs pour commencer une partie.'
-      return
-    end
-
-    @game.update!(status: :active)
-
-    first_round = @game.rounds.create!(
-      position: 1,
-      phase: :ascending # ou une méthode pour le déterminer
-    )
-
-    # Crée une participation vide pour chaque joueur
-    @game.players.each do |player|
-      first_round.predictions.create!(player: player)
-    end
-
-    redirect_to game_round_path(@game, first_round), notice: 'La partie a commencé !'
+  def destroy
+    @game.destroy
+    redirect_to games_path
   end
-
-  def destroy; end
 
   private
 

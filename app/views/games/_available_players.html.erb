@@ -1,6 +1,6 @@
 <%= turbo_frame_tag "available_players" do %>
   <div class="grid gap-4 sm:grid-cols-2">
-    <% (players - game.players).each do |player| %>
+    <% (Player.all - game.players).each do |player| %>
       <div class="bg-gray-50 p-4 rounded-xl shadow">
         <h4 class="font-bold text-gray-800"><%= player.name %></h4>
         <p class="text-sm text-gray-600"><%= player.description.presence || "Aucune description" %></p>
