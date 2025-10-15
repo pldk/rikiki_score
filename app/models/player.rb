@@ -15,7 +15,7 @@
 class Player < ApplicationRecord
   after_update_commit :capitalize_name
 
-  has_many :predictions
+  has_many :predictions, dependent: :destroy
   has_many :rounds, through: :predictions
 
   has_many :game_players, dependent: :destroy

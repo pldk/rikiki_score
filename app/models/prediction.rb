@@ -64,15 +64,15 @@ class Prediction < ApplicationRecord
   end
 
   def self.calculate_all_scores
-    all.each(&:calculate_score)
+    all.find_each(&:calculate_score)
   end
 
   def self.calculate_player_scores(player_id)
-    where(player_id: player_id).each(&:calculate_score)
+    where(player_id: player_id).find_each(&:calculate_score)
   end
 
   def self.calculate_round_scores(round_id)
-    where(round_id: round_id).each(&:calculate_score)
+    where(round_id: round_id).find_each(&:calculate_score)
   end
 
   def assign_position

@@ -9,6 +9,7 @@ RSpec.describe 'Predictions', type: :request do
   let!(:prediction) { Prediction.create(round_id: round.id, player_id: player.id, predicted_tricks: 1) }
 
   before { game.players << player }
+
   describe 'GET /edit' do
     it 'returns http success' do
       get edit_game_round_prediction_path(game, round, prediction)

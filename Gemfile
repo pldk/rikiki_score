@@ -60,6 +60,8 @@ group :development, :test do
   gem 'factory_bot_rails'
   gem 'faker'
   gem 'rspec-rails', '~> 8.0.0'
+  gem 'rubocop-capybara', '~> 2.22', '>= 2.22.1'
+  gem 'rubocop-factory_bot', '~> 2.27', '>= 2.27.1'
   gem 'rubocop-rails', require: false
   gem 'simple_form'
   gem 'simple_form-tailwind'
@@ -68,23 +70,24 @@ end
 group :test do
   gem 'capybara'
   gem 'rexml'
+  gem 'rubocop-rspec', require: false
+  gem 'rubocop-rspec_rails', require: false
 end
 
 group :development do
   gem 'annotate'
   gem 'better_errors'
   gem 'binding_of_caller'
+  gem 'brakeman', require: false
+  gem 'bundler-audit', require: false
   # Use console on exceptions pages [https://github.com/rails/web-console]
   gem 'font-awesome-sass', '~> 6.0.0'
   # Add speed badges [https://github.com/MiniProfiler/rack-mini-profiler]
   gem 'meta_request'
   gem 'rack-mini-profiler'
   # Speed up commands on slow machines / big apps [https://github.com/rails/spring]
+  gem 'rails_best_practices', require: false
+  gem 'ruby_audit', require: false
   gem 'spring'
   gem 'web-console'
 end
-
-gem 'brakeman', require: false
-gem 'bundler-audit', require: false
-gem 'rails_best_practices', require: false
-gem 'ruby_audit', require: false

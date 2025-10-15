@@ -317,12 +317,25 @@ GEM
     rubocop-ast (1.46.0)
       parser (>= 3.3.7.2)
       prism (~> 1.4)
+    rubocop-capybara (2.22.1)
+      lint_roller (~> 1.1)
+      rubocop (~> 1.72, >= 1.72.1)
+    rubocop-factory_bot (2.27.1)
+      lint_roller (~> 1.1)
+      rubocop (~> 1.72, >= 1.72.1)
     rubocop-rails (2.33.3)
       activesupport (>= 4.2.0)
       lint_roller (~> 1.1)
       rack (>= 1.1)
       rubocop (>= 1.75.0, < 2.0)
       rubocop-ast (>= 1.44.0, < 2.0)
+    rubocop-rspec (3.7.0)
+      lint_roller (~> 1.1)
+      rubocop (~> 1.72, >= 1.72.1)
+    rubocop-rspec_rails (2.31.0)
+      lint_roller (~> 1.1)
+      rubocop (~> 1.72, >= 1.72.1)
+      rubocop-rspec (~> 3.5)
     ruby-progressbar (1.13.0)
     ruby_audit (3.0.0)
       bundler-audit (~> 0.9.0)
@@ -420,7 +433,11 @@ DEPENDENCIES
   redis (~> 4.0)
   rexml
   rspec-rails (~> 8.0.0)
+  rubocop-capybara (~> 2.22, >= 2.22.1)
+  rubocop-factory_bot (~> 2.27, >= 2.27.1)
   rubocop-rails
+  rubocop-rspec
+  rubocop-rspec_rails
   ruby_audit
   simple_form
   simple_form-tailwind

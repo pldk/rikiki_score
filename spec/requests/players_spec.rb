@@ -3,7 +3,7 @@
 require 'rails_helper'
 
 RSpec.describe 'Players', type: :request do
-  before(:each) { host! 'example.com' }
+  before { host! 'example.com' }
 
   let!(:game) { Game.create!(style: 'short') }
   let!(:player) { Player.create!(name: 'Alice') }

@@ -12,7 +12,7 @@
 #  updated_at :datetime         not null
 #
 class Game < ApplicationRecord
-  has_many :rounds
+  has_many :rounds, dependent: :destroy
   has_many :predictions, through: :rounds
   accepts_nested_attributes_for :rounds
 
