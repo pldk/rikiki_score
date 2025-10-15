@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 
-class AddScoreService
-  def initialize; end
+module Rounds
+  class AddScoreService
+    def initialize; end
+  end
 end

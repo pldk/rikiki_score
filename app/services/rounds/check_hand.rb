@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 
-class CheckHandService
-  def initialize; end
+module Rounds
+  class CheckHandService
+    def initialize; end
+  end
 end
