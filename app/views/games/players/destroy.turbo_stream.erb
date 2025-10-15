@@ -1,0 +1,3 @@
+<%= turbo_stream.replace "selected_players" do %>
+  <%= render partial: "games/players/selected_players", locals: { game: @game } %>
+<% end %>

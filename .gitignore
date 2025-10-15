@@ -32,3 +32,14 @@
 
 /app/assets/builds/*
 !/app/assets/builds/.keep
+
+# The .env file is used for both dev and test environments.
+# It is not included in the repository, but you can create a .env file
+# in the root of your project to set environment variables for your local
+# development and test environments.
+# You can use the .env.example file as a template for your .env file.   
+.env
+
+# .env.*.local filres are wher ewe put actual secrets we need for test and dev
+# environments. So we don't want to check them in.
+.env.*.local

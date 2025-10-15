@@ -5,8 +5,8 @@
 # Table name: games
 #
 #  id         :bigint           not null, primary key
-#  stars      :boolean          default(NULL)
-#  status     :integer
+#  stars      :boolean          default(FALSE)
+#  status     :integer          default(NULL)
 #  style      :integer
 #  created_at :datetime         not null
 #  updated_at :datetime         not null

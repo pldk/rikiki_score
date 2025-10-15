@@ -4,16 +4,24 @@
 #
 # Table name: players
 #
-#  id          :bigint           not null, primary key
-#  description :string
+#  id          :integer          not null, primary key
 #  name        :string
+#  description :string
 #  rank        :integer
 #  created_at  :datetime         not null
 #  updated_at  :datetime         not null
 #
+
 class Player < ApplicationRecord
-  has_many :rounds
-  has_many :games, through: :rounds
+  after_update_commit :capitalize_name
+
+  has_many :predictions, dependent: :destroy
+  has_many :rounds, through: :predictions
+
+  has_many :game_players, dependent: :destroy
+  has_many :games, through: :game_players
+
+  validates :name, presence: true
 
   def games_played
     games.size
@@ -25,5 +33,9 @@ class Player < ApplicationRecord
 
   def games_won
     games.size
+  end
+
+  def capitalize_name
+    name.capitalize if name.present?
   end
 end

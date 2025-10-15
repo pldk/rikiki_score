@@ -4,8 +4,10 @@ class CreateRounds < ActiveRecord::Migration[7.0]
   def change
     create_table :rounds do |t|
       t.integer :length
+      t.integer :phase, default: 0
+      t.integer :position
       t.references :game, null: false, foreign_key: true
-      t.references :player, null: false, foreign_key: true
+      t.boolean 'has_trump', default: true
 
       t.timestamps
     end

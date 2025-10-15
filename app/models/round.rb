@@ -5,23 +5,33 @@
 # Table name: rounds
 #
 #  id         :bigint           not null, primary key
+#  has_trump  :boolean          default(TRUE)
 #  length     :integer
+#  phase      :integer          default(0)
+#  position   :integer
 #  created_at :datetime         not null
 #  updated_at :datetime         not null
 #  game_id    :bigint           not null
-#  player_id  :bigint           not null
 #
 # Indexes
 #
-#  index_rounds_on_game_id    (game_id)
-#  index_rounds_on_player_id  (player_id)
+#  index_rounds_on_game_id  (game_id)
 #
 # Foreign Keys
 #
 #  fk_rails_...  (game_id => games.id)
-#  fk_rails_...  (player_id => players.id)
 #
 class Round < ApplicationRecord
   belongs_to :game
-  belongs_to :player
+  has_many :predictions, dependent: :destroy
+  has_many :players, through: :predictions
+
+  accepts_nested_attributes_for :predictions
+
+  def phase
+    mid = game.rounds.count / 2.0
+    self_index = game.rounds.order(:created_at).pluck(:id).index(id)
+
+    self_index < mid ? 'ascending' : 'descending'
+  end
 end

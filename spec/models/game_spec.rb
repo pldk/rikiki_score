@@ -5,8 +5,8 @@
 # Table name: games
 #
 #  id         :bigint           not null, primary key
-#  stars      :boolean          default(NULL)
-#  status     :integer
+#  stars      :boolean          default(FALSE)
+#  status     :integer          default(NULL)
 #  style      :integer
 #  created_at :datetime         not null
 #  updated_at :datetime         not null
@@ -14,31 +14,35 @@
 require 'rails_helper'
 
 RSpec.describe Game, type: :model do
-  let(:game) { Game.new(style: 'short') }
-  it 'should not be valid without players' do
+  let(:game) { described_class.new(style: 'short') }
+  let(:players) { Array.new(4) { Player.create!(name: Faker::Name.first_name) } }
+
+  let(:long_game) { described_class.new(style: 'long') }
+
+  it 'is not valid without players' do
     expect(game.players).to be_empty
   end
-  let(:players) { Array.new(4) { Player.new } }
-  it 'should contain players' do
-    game.players = players
+
+  it 'contains players' do
+    game.save!
+    game.players << players
     expect(game.players.size).to eq(4)
   end
 
-  it 'should be a short game' do
-    expect(game.style).to be('short')
+  it 'is a short game' do
+    expect(game.style).to eq('short')
   end
 
-  it 'should be a long game' do
-    game.update(style: 'long')
-    expect(game.style).to be('long')
+  it 'is a long game' do
+    expect(long_game.style).to eq('long')
   end
 
-  it 'should disable stars' do
+  it 'disables stars by default' do
     expect(game.stars).to be_falsey
   end
 
-  it 'should enhance stars' do
-    game.stars = 0
+  it 'enhances stars' do
+    game.stars = true
     expect(game.stars).to be_truthy
   end
 end

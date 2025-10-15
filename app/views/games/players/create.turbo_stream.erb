@@ -1,0 +1,7 @@
+<%= turbo_stream.replace "selected_players" do %>
+  <ul class="divide-y">
+    <% @game.players.each do |player| %>
+      <li class="py-2 text-center text-gray-800 font-medium"><%= player.name %></li>
+    <% end %>
+  </ul>
+<% end %>
