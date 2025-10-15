@@ -4,8 +4,8 @@ require 'rails_helper'
 
 RSpec.describe 'Predictions', type: :request do
   let!(:game) { Game.create! }
-  let!(:player) { Player.create!(name: 'Alice')}
-  let!(:round) { Round.create!(phase: 1, game_id: game.id)}
+  let!(:player) { Player.create!(name: 'Alice') }
+  let!(:round) { Round.create!(phase: 1, game_id: game.id) }
   let!(:prediction) { Prediction.create(round_id: round.id, player_id: player.id, predicted_tricks: 1) }
 
   before { game.players << player }

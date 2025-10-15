@@ -1,9 +1,11 @@
+# frozen_string_literal: true
+
 # spec/requests/games_spec.rb
 require 'rails_helper'
 
 RSpec.describe 'Games', type: :request do
   let!(:game) { Game.create! }
-  
+
   describe 'GET /index' do
     it 'returns http success' do
       get games_path

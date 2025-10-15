@@ -3,7 +3,6 @@
 require 'rails_helper'
 
 RSpec.describe 'Games::Players', type: :request do
-
   let!(:game) { Game.create!(style: 'short') }
   let!(:player) { Player.create!(name: 'Alice') }
 

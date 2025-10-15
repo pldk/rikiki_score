@@ -6,7 +6,6 @@ class PredictionsController < ApplicationController
     @game = Game.find(params[:game_id])
     @prediction = Prediction.find(params[:id])
     @player = @prediction.player
-
   end
 
   def update

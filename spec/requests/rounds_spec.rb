@@ -5,7 +5,7 @@ require 'rails_helper'
 RSpec.describe 'Rounds', type: :request do
   let!(:game) { Game.create }
   let!(:player) { Player.create }
-  let!(:round) { Round.create(game: game)}
+  let!(:round) { Round.create(game: game) }
   describe 'GET /index' do
     it 'returns http success' do
       get game_rounds_path(game)
