@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class PredictionsController < ApplicationController
   before_action :set_round
   before_action :set_prediction, only: [:update]
@@ -8,13 +10,13 @@ class PredictionsController < ApplicationController
     if @prediction.save
       render turbo_stream: turbo_stream.replace(
         "prediction_#{@round.id}_#{@prediction.player_id}",
-        partial: "predictions/form_actual",
+        partial: 'predictions/form_actual',
         locals: { prediction: @prediction, game: @round.game }
       )
     else
       render turbo_stream: turbo_stream.replace(
         "prediction_#{@round.id}_#{@prediction.player_id}",
-        partial: "predictions/form_predicted",
+        partial: 'predictions/form_predicted',
         locals: { round: @round, player: @prediction.player, game: @round.game }
       )
     end
@@ -22,18 +24,12 @@ class PredictionsController < ApplicationController
 
   def update
     if @prediction.update(prediction_params)
-      render turbo_stream: turbo_stream.replace(
-        "prediction_#{@prediction.round_id}_#{@prediction.player_id}",
-        partial: "predictions/form_actual",
-        locals: { prediction: @prediction, game: @prediction.round.game }
-      )
-    else
-      render turbo_stream: turbo_stream.replace(
-        "prediction_#{@prediction.round_id}_#{@prediction.player_id}",
-        partial: "predictions/form_actual",
-        locals: { prediction: @prediction, game: @prediction.round.game }
-      )
     end
+    render turbo_stream: turbo_stream.replace(
+      "prediction_#{@prediction.round_id}_#{@prediction.player_id}",
+      partial: 'predictions/form_actual',
+      locals: { prediction: @prediction, game: @prediction.round.game }
+    )
   end
 
   private
