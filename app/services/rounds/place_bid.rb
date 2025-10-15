@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-module Rounds 
+module Rounds
   class PlaceBidService
     def initialize(params)
       @round = params[:round]

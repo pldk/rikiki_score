@@ -2,6 +2,9 @@
 
 module Rounds
   class CheckHandService
-    def initialize; end
+    def initialize(params)
+      @round = params[:round]
+      @bid = params[:round][:bid]
+    end
   end
 end
