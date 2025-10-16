@@ -12,11 +12,17 @@
             input_html: { class: "w-20 rounded-lg text-center border-gray-300 dark:bg-gray-700 dark:text-white",
                           data: { action: "change->auto-submit#submit" } } %>
 
+      <% star_disabled = Prediction.joins(:round)
+          .where(player_id: player, is_star: true)
+          .where(rounds: { game_id: @game.id })
+          .any? { |p| p.round.phase == round.phase && p.id != prediction.id } %>
+
       <%= f.input :is_star,
             as: :boolean,
             label: "⭐️",
             input_html: { class: "w-4 h-4 text-yellow-500 border-gray-300 rounded",
-                          data: { action: "change->auto-submit#submit" } } %>
+                          data: { action: "change->auto-submit#submit" },
+                          disabled: star_disabled } %>
 
       <%= f.submit "Go",
             class: "px-3 py-1 text-xs font-semibold text-white bg-blue-600 rounded-lg hover:bg-blue-700" %>

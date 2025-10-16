@@ -24,7 +24,9 @@
 FactoryBot.define do
   factory :round do
     length { 1 }
-    game { nil }
-    player { nil }
+    position { 1 }
+    has_trump { true }
+    phase { 0 }
+    association :game
   end
 end

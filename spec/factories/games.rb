@@ -14,5 +14,20 @@
 FactoryBot.define do
   factory :game do
     status { 1 }
+    style { :long }
+    stars { false }
+
+    trait :with_players do
+      transient do
+        player_count { 4 }
+      end
+
+      after(:create) do |game, evaluator|
+        evaluator.player_count.times do
+          player = create(:player)
+          create(:game_player, game: game, player: player)
+        end
+      end
+    end
   end
 end

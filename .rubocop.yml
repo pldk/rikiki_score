@@ -51,3 +51,6 @@ plugins:
   - rubocop-rails
   - rubocop-rspec
   - rubocop-rspec_rails
+
+RSpec/ExampleLength:
+  Enabled: false
