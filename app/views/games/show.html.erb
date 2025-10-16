@@ -19,14 +19,18 @@
           <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 border-gray-200 hover:bg-gray-50 dark:hover:bg-gray-600">
             <!-- Round number -->
             <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-              <%= round.position + 1 %>
+              <%= round.position %>
             </th>
 
             <!-- Player predictions -->
             <% @game.players.each do |player| %>
               <% prediction = round.predictions.find { |p| p.player_id == player.id } %>
               <td class="px-6 py-4">
-                <%= prediction ? prediction.plis_annonce : "-" %>
+                <%= render "rounds/round_row",
+                      round: round,
+                      player: player,
+                      prediction: prediction,
+                      game: @game %>
               </td>
             <% end %>
 

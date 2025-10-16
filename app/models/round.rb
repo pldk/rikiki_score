@@ -29,9 +29,7 @@ class Round < ApplicationRecord
   accepts_nested_attributes_for :predictions
 
   def phase
-    mid = game.rounds.count / 2.0
-    self_index = game.rounds.order(:created_at).pluck(:id).index(id)
-
-    self_index < mid ? 'ascending' : 'descending'
+    mid = game.total_rounds / 2.0
+    position <= mid ? :up : :down
   end
 end

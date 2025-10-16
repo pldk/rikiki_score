@@ -1,0 +1,33 @@
+<%= turbo_frame_tag "prediction_#{round.id}_#{player.id}" do %>
+  <%# Déterminer la couleur de fond selon la prédiction %>
+  <% bg_class =
+    if prediction.nil?
+      "bg-blue-50 dark:bg-blue-900/40"
+    elsif prediction.actual_tricks.nil?
+      "bg-yellow-50 dark:bg-yellow-900/40"
+    elsif prediction.actual_tricks == prediction.predicted_tricks
+      "bg-green-100 dark:bg-green-900/40"
+    else
+      "bg-red-100 dark:bg-red-900/40"
+    end %>
+
+  <div class="p-2 rounded-lg transition-colors duration-300 <%= bg_class %>">
+    <% if prediction.present? && prediction.actual_tricks.present? %>
+      <!-- actual_tricks déjà rempli : affichage seulement -->
+      <span class="text-center block text-black dark:text-gray-100 font-semibold">
+        🎯 <%= prediction.predicted_tricks %> | <%= prediction.actual_tricks %>
+      </span>
+    <% elsif prediction.present? %>
+      <!-- actual_tricks non rempli : formulaire -->
+      <%= render "predictions/form_actual",
+            prediction: prediction,
+            game: game %>
+    <% else %>
+      <!-- prédiction non existante : formulaire prédiction -->
+      <%= render "predictions/form_predicted",
+            round: round,
+            player: player,
+            game: game %>
+    <% end %>
+  </div>
+<% end %>

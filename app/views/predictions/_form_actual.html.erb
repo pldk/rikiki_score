@@ -1,0 +1,21 @@
+<%= turbo_frame_tag "prediction_#{prediction.round_id}_#{prediction.player_id}" do %>
+  <%= simple_form_for [game, prediction.round, prediction],
+        method: :patch,
+        data: { controller: "auto-submit", turbo_frame: "prediction_#{prediction.round_id}_#{prediction.player_id}" } do |f| %>
+
+    <div class="flex items-center gap-3">
+      <span class="text-sm text-gray-500 dark:text-gray-400">
+        🎯 <%= prediction.predicted_tricks %>
+      </span>
+
+      <%= f.input :actual_tricks,
+            collection: (0..(prediction.round.position || 0)).to_a,
+            label: false,
+            input_html: { class: "w-20 rounded-lg text-center border-gray-300 dark:bg-gray-700 dark:text-white",
+                          data: { action: "change->auto-submit#submit" } } %>
+
+      <%= f.submit "✓",
+            class: "px-3 py-1 text-xs font-semibold text-white bg-green-600 rounded-lg hover:bg-green-700" %>
+    </div>
+  <% end %>
+<% end %>

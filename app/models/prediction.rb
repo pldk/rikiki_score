@@ -29,28 +29,40 @@ class Prediction < ApplicationRecord
   belongs_to :round
   belongs_to :player
 
-  # validates :predicted_tricks, presence: truetot
-  # validates :actual_trickstot
   validates :score, presence: true
-
   validate :only_one_star_per_phase
+  validate :total_predictions_cannot_equal_round_position
 
   before_create :assign_position
+
+  delegate :phase, to: :round
+
+  # enum :phase, { up: 0, down: 1 }
+
+  # attribute :phase
 
   def only_one_star_per_phase
     return unless is_star
 
-    current_phase = round.phase
-    existing_star = Prediction
-                    .joins(:round)
-                    .where(player_id: player_id, is_star: true)
-                    .where(rounds: { phase: current_phase })
-                    .where.not(id: id)
-                    .exists?
+    already_used = Prediction.joins(:round)
+                             .where(player_id: player_id, is_star: true)
+                             .where(rounds: { game_id: round.game.id, phase: round.phase })
+                             .where.not(id: id)
+                             .exists?
 
-    return unless existing_star
+    errors.add(:is_star, "déjà utilisée pendant la #{phase == :up ? 'montée' : 'descente'}") if already_used
+  end
 
-    errors.add(:is_star, 'déjà utilisée pour cette phase')
+  def total_predictions_cannot_equal_round_position
+    return unless round_id && predicted_tricks
+
+    # Get all predictions for this round (including the current one being saved)
+    existing_predictions = round.predictions.where.not(id: id)
+    total_predicted = existing_predictions.sum(:predicted_tricks) + predicted_tricks
+
+    return unless total_predicted == round.position
+
+    errors.add(:predicted_tricks, "le total des prédictions (#{total_predicted}) ne peut pas être égal à (#{round.position})")
   end
 
   def calculate_score
@@ -64,24 +76,18 @@ class Prediction < ApplicationRecord
   end
 
   def self.calculate_all_scores
-    all.find_each(&:calculate_score)
+    all.find_each { |p| p.update!(score: p.calculate_score) }
   end
 
   def self.calculate_player_scores(player_id)
-    where(player_id: player_id).find_each(&:calculate_score)
+    where(player_id: player_id).find_each { |p| p.update!(score: p.calculate_score) }
   end
 
   def self.calculate_round_scores(round_id)
-    where(round_id: round_id).find_each(&:calculate_score)
+    where(round_id: round_id).find_each { |p| p.update!(score: p.calculate_score) }
   end
 
   def assign_position
-    round.position
-  end
-
-  def phase
-    total_rounds = game.total_rounds
-    midpoint = (total_rounds / 2.0).floor
-    position < midpoint ? 'ascending' : 'descending'
+    self.position = round.position
   end
 end

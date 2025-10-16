@@ -21,8 +21,8 @@ class Game < ApplicationRecord
 
   accepts_nested_attributes_for :players, reject_if: ->(attributes) { attributes['username'].blank? }
 
-  enum :status, { pending: 0, active: 1, finished: 2 }
-
+  # enum :mode, { short_round: 0, long_rounds: 1 }
+  enum :status, { pending: 0, active: 1, finished: 2, aborted: 3 }
   enum :style, { long: 0, short: 1 }
 
   def total_rounds
@@ -30,14 +30,26 @@ class Game < ApplicationRecord
   end
 
   def long_rounds
+    return 0 if players.empty?
+
     2 * (52 / players.size) + players.size - 2
   end
 
   def short_rounds
-    2 * (52 / players.size) + - 1
+    2 * (52 / players.size) - 1
   end
 
   def round_count
     total_rounds.size
+  end
+
+  def generate_rounds!
+    rounds.destroy_all
+
+    total = total_rounds
+
+    (1..total).each do |pos|
+      rounds.create!(position: pos)
+    end
   end
 end
