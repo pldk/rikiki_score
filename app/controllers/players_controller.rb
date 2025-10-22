@@ -8,24 +8,6 @@ class PlayersController < ApplicationController
 
   def show; end
 
-  def new
-    @player = Player.new
-    @players = Player.all
-  end
-
-  def create
-    @player = Player.new(player_params)
-    if @player.save
-      respond_to do |format|
-        format.turbo_stream
-        format.html { redirect_to @player }
-      end
-    else
-      @players = Player.all
-      render :new
-    end
-  end
-
   def edit; end
 
   def update; end
