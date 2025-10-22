@@ -22,7 +22,6 @@ class PredictionsController < ApplicationController
           )
         end
         format.html do
-          flash.now[:alert] = @prediction.errors.full_messages.to_sentence
           render 'rounds/show', status: :unprocessable_entity
         end
       end
