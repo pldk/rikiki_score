@@ -5,15 +5,15 @@ Rails.application.routes.draw do
 
   resources :games do
     member do
-      post :start
+      patch :start
     end
 
-    resources :players, only: %i[index create destroy], controller: 'games/players'
+    resources :players, only: %i[index new create destroy], controller: 'games/players'
 
     resources :rounds, except: %i[destroy] do
       resources :predictions, only: %i[index create edit update]
     end
   end
 
-  resources :players, only: %i[index show new create]
+  resources :players, only: %i[index show]
 end
