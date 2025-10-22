@@ -1,4 +1,6 @@
 <%= turbo_frame_tag "selected_players" do %>
+<p class="text-gray-600 text-center mb-4" data-game-players-target="counter"><%= @game.players.size %> joueurs prêts 🎮</p>
+
   <ul class="divide-y divide-gray-200">
     <% if game.players.any? %>
       <% game.players.each do |player| %>
