@@ -56,9 +56,9 @@ class Prediction < ApplicationRecord
   def total_predictions_cannot_equal_round_position
     return unless round_id && predicted_tricks
 
-    # Get all predictions for this round (including the current one being saved)
-    existing_predictions = round.predictions.where.not(id: id)
-    total_predicted = existing_predictions.sum(:predicted_tricks) + predicted_tricks
+    return unless round.predictions.count == round.game.players.count - 1
+
+    total_predicted = round.predictions.sum(:predicted_tricks) + predicted_tricks
 
     return unless total_predicted == round.position
 

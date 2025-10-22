@@ -5,20 +5,26 @@ class PredictionsController < ApplicationController
   before_action :set_prediction, only: [:update]
 
   def create
-    @prediction = @round.predictions.new(prediction_params)
+    @prediction = @round.predictions.build(prediction_params)
 
     if @prediction.save
-      render turbo_stream: turbo_stream.replace(
-        "prediction_#{@round.id}_#{@prediction.player_id}",
-        partial: 'predictions/form_actual',
-        locals: { prediction: @prediction, game: @round.game }
-      )
+      respond_to do |format|
+        format.turbo_stream
+        format.html { redirect_to game_round_path(@round.game, @round), notice: 'Prédiction enregistrée !' }
+      end
     else
-      render turbo_stream: turbo_stream.replace(
-        "prediction_#{@round.id}_#{@prediction.player_id}",
-        partial: 'predictions/form_predicted',
-        locals: { round: @round, player: @prediction.player, game: @round.game }
-      )
+      respond_to do |format|
+        format.turbo_stream do
+          render turbo_stream: turbo_stream.replace(
+            dom_id(@prediction, :form),
+            partial: 'predictions/form_predicted',
+            locals: { prediction: @prediction, round: @round, game: @round.game }
+          )
+        end
+        format.html do
+          render 'rounds/show', status: :unprocessable_entity
+        end
+      end
     end
   end
 

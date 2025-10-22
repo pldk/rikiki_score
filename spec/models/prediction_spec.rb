@@ -1,4 +1,3 @@
-# rubocop:disable RSpec/NestedGroups
 # frozen_string_literal: true
 
 require 'rails_helper'
@@ -29,87 +28,32 @@ RSpec.describe Prediction, type: :model do
     end
   end
 
-  describe 'business rule: total predicted tricks cannot equal round position' do
-    context 'when round position is 5' do
-      let(:round) { create(:round, game: game, position: 5) }
-      let!(:players) { game.players }
+  describe '#total_predictions_cannot_equal_round_position' do
+    let(:game) { create(:game, :with_players) }
+    let(:round) { create(:round, game: game, position: 5) }
+    let(:players) { game.players }
 
-      context 'with valid predictions' do
-        it 'allows predictions when total does not equal round position' do
-          # Create predictions that sum to 4 (not equal to round position 5)
-          players.each_with_index do |p, index|
-            create(:prediction,
-                   round: round,
-                   player: p,
-                   predicted_tricks: index == 0 ? 4 : 0)
-          end
+    it 'does not validate if total predictions equals position for last player' do
+      # 3 joueurs ont déjà fait leur prédiction
+      create(:prediction, round: round, player: players[0], predicted_tricks: 1)
+      create(:prediction, round: round, player: players[1], predicted_tricks: 1)
+      create(:prediction, round: round, player: players[2], predicted_tricks: 2)
 
-          expect(round.predictions.count).to eq(4)
-          expect(round.predictions.sum(:predicted_tricks)).to eq(4)
-          expect(round.predictions.sum(:predicted_tricks)).not_to eq(round.position)
-        end
+      # Dernier joueur entre sa prédiction
+      last_pred = build(:prediction, round: round, player: players[3], predicted_tricks: 1)
 
-        it 'allows predictions when total is greater than round position' do
-          # Create predictions that sum to 6 (greater than round position 5)
-          players.each_with_index do |p, index|
-            create(:prediction,
-                   round: round,
-                   player: p,
-                   predicted_tricks: index == 0 ? 6 : 0)
-          end
-
-          expect(round.predictions.sum(:predicted_tricks)).to eq(6)
-          expect(round.predictions.sum(:predicted_tricks)).not_to eq(round.position)
-        end
-
-        it 'allows predictions when total is less than round position' do
-          # Create predictions that sum to 3 (less than round position 5)
-          players.each_with_index do |p, index|
-            create(:prediction,
-                   round: round,
-                   player: p,
-                   predicted_tricks: index == 0 ? 3 : 0)
-          end
-
-          expect(round.predictions.sum(:predicted_tricks)).to eq(3)
-          expect(round.predictions.sum(:predicted_tricks)).not_to eq(round.position)
-        end
-      end
-
-      context 'with invalid predictions' do
-        it 'prevents creating predictions that sum to round position' do
-          # Try to create a prediction that would make total = 5 (equal to round position 5)
-          invalid_prediction = build(:prediction,
-                                     round: round,
-                                     player: players.first,
-                                     predicted_tricks: 5)
-
-          expect(invalid_prediction).not_to be_valid
-          expect(invalid_prediction.errors[:predicted_tricks]).to include(
-            'le total des prédictions (5) ne peut pas être égal à (5)'
-          )
-
-          # The prediction should not be saved
-          expect(round.predictions.count).to eq(0)
-        end
-      end
+      expect(last_pred).not_to be_valid
+      expect(last_pred.errors[:predicted_tricks]).to include(/le total des prédictions/)
     end
 
-    context 'when round position is 3' do
-      let(:round) { create(:round, game: game, position: 3) }
-      let!(:players) { game.players }
+    it 'allows prediction if total is different from round position' do
+      create(:prediction, round: round, player: players[0], predicted_tricks: 1)
+      create(:prediction, round: round, player: players[1], predicted_tricks: 1)
+      create(:prediction, round: round, player: players[2], predicted_tricks: 1)
 
-      it 'allows predictions when total does not equal 3' do
-        players.each_with_index do |p, index|
-          create(:prediction,
-                 round: round,
-                 player: p,
-                 predicted_tricks: index == 0 ? 2 : 0)
-        end
+      valid_pred = build(:prediction, round: round, player: players[3], predicted_tricks: 3)
 
-        expect(round.predictions.sum(:predicted_tricks)).to eq(2)
-        expect(round.predictions.sum(:predicted_tricks)).not_to eq(round.position)
-      end
+      expect(valid_pred).to be_valid
     end
   end
 
@@ -275,5 +219,3 @@ RSpec.describe Prediction, type: :model do
     end
   end
 end
-
-# rubocop:enable RSpec/NestedGroups

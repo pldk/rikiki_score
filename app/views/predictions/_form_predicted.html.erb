@@ -1,7 +1,11 @@
 <%= turbo_frame_tag "prediction_#{round.id}_#{player.id}" do %>
   <%= simple_form_for [game, round, Prediction.new],
         data: { controller: "auto-submit", turbo_frame: "prediction_#{round.id}_#{player.id}" } do |f| %>
-
+    <% if prediction.errors.any? %>
+      <div class="text-red-600 text-sm mb-1 font-semibold">
+        ⚠️ <%= prediction.errors.full_messages.to_sentence %>
+      </div>
+    <% end %>
     <%= f.hidden_field :player_id, value: player.id %>
 
     <div class="flex items-center gap-2">
