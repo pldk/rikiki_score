@@ -19,7 +19,7 @@ class GamesController < ApplicationController
   def create
     @game = Game.new(game_params)
     if @game.save
-      redirect_to game_players_path(@game)
+      redirect_to new_game_player_path(@game)
     else
       render :new
     end
@@ -38,6 +38,12 @@ class GamesController < ApplicationController
   def destroy
     @game.destroy
     redirect_to games_path
+  end
+
+  def start
+    @game = Game.find(params[:id])
+    @game.update(status: :active)
+    redirect_to game_rounds_path(@game), notice: 'La partie commence 🃏'
   end
 
   private

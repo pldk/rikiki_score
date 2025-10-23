@@ -1,7 +1,7 @@
 <%= turbo_stream.replace "selected_players" do %>
-  <ul class="divide-y">
-    <% @game.players.each do |player| %>
-      <li class="py-2 text-center text-gray-800 font-medium"><%= player.name %></li>
-    <% end %>
-  </ul>
+  <%= render "selected_players", game: @game %>
+<% end %>
+
+<%= turbo_stream.replace "available_players" do %>
+  <%= render "available_players", game: @game, players: Player.where.not(id: @game.players.ids) %>
 <% end %>

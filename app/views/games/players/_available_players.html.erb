@@ -1,0 +1,16 @@
+<%= turbo_frame_tag "available_players" do %>
+  <ul class="divide-y divide-gray-200">
+    <% players.each do |player| %>
+      <% unless game.players.include?(player) %>
+        <li class="flex justify-between items-center py-2">
+          <span><%= player.name %></span>
+          <%= button_to "Ajouter",
+                        game_players_path(game, player: { name: player.name }),
+                        method: :post,
+                        form: { data: { turbo_stream: true } },
+                        class: "text-blue-600 hover:text-blue-800 text-sm font-semibold" %>
+        </li>
+      <% end %>
+    <% end %>
+  </ul>
+<% end %>

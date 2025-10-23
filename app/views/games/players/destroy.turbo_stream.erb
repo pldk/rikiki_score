@@ -1,3 +1,7 @@
 <%= turbo_stream.replace "selected_players" do %>
-  <%= render partial: "games/players/selected_players", locals: { game: @game } %>
+  <%= render "selected_players", game: @game %>
+<% end %>
+
+<%= turbo_stream.replace "available_players" do %>
+  <%= render "available_players", game: @game, players: Player.where.not(id: @game.players.ids) %>
 <% end %>

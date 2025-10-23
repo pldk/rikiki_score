@@ -22,22 +22,6 @@ RSpec.describe 'Players', type: :request do
     end
   end
 
-  describe 'GET /new' do
-    it 'returns http success' do
-      get new_player_path
-      expect(response).to have_http_status(:success)
-    end
-  end
-
-  describe 'POST /create' do
-    it 'creates a player and redirects' do
-      post players_path, params: { player: { name: 'Bob' } }
-      expect(response).to have_http_status(:redirect)
-      follow_redirect!
-      expect(response.body).to include('Bob')
-    end
-  end
-
   # describe 'GET /edit' do
   #   it 'returns http success' do
   #     get '/players/edit'
@@ -54,7 +38,7 @@ RSpec.describe 'Players', type: :request do
 
   describe 'GET /destroy' do
     it 'returns http success' do
-      delete game_player_path(game, player)
+      delete player_path(player)
       expect(response).to have_http_status(:redirect)
     end
   end

@@ -21,7 +21,8 @@ class Game < ApplicationRecord
 
   accepts_nested_attributes_for :players, reject_if: ->(attributes) { attributes['username'].blank? }
 
-  # enum :mode, { short_round: 0, long_rounds: 1 }
+  after_initialize :set_default_status, if: :new_record?
+
   enum :status, { pending: 0, active: 1, finished: 2, aborted: 3 }
   enum :style, { long: 0, short: 1 }
 
@@ -51,5 +52,11 @@ class Game < ApplicationRecord
     (1..total).each do |pos|
       rounds.create!(position: pos)
     end
+  end
+
+  private
+
+  def set_default_status
+    self.status ||= :pending
   end
 end

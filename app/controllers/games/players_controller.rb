@@ -2,32 +2,45 @@
 
 module Games
   class PlayersController < ApplicationController
+    before_action :set_game
+
     def index
-      @game = Game.find(params[:game_id])
       @players = @game.players
     end
 
+    def new
+      @players = Player.all
+      @player = Player.new
+    end
+
     def create
-      @game = Game.find(params[:game_id])
-      player = Player.find(params[:player_id])
+      player = Player.find_or_create_by(name: player_params[:name])
       @game.players << player unless @game.players.include?(player)
 
       respond_to do |format|
         format.turbo_stream
-        format.html { redirect_to game_players_path(@game) }
+        format.html { redirect_to new_game_player_path(@game) }
       end
     end
 
     def destroy
-      @game = Game.find(params[:game_id])
-      @remaining_players = Player.all - @game.players
-      player = Player.find(params[:id])
+      player = @game.players.find(params[:id])
       @game.players.delete(player)
 
       respond_to do |format|
         format.turbo_stream
-        format.html { redirect_to game_players_path(@game) }
+        format.html { redirect_to new_game_player_path(@game) }
       end
+    end
+
+    private
+
+    def set_game
+      @game = Game.find(params[:game_id])
+    end
+
+    def player_params
+      params.require(:player).permit(:name, :description)
     end
   end
 end
