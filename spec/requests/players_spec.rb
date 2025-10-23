@@ -38,7 +38,7 @@ RSpec.describe 'Players', type: :request do
 
   describe 'GET /destroy' do
     it 'returns http success' do
-      delete game_player_path(game, player)
+      delete player_path(player)
       expect(response).to have_http_status(:redirect)
     end
   end

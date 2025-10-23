@@ -16,7 +16,7 @@ class PlayersController < ApplicationController
     @player.destroy
     respond_to do |format|
       format.turbo_stream
-      format.html { redirect_to @players }
+      format.html { redirect_to players_path }
     end
   end
 
