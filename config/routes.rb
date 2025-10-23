@@ -15,5 +15,5 @@ Rails.application.routes.draw do
     end
   end
 
-  resources :players, only: %i[index show]
+  resources :players, only: %i[index show destroy]
 end
