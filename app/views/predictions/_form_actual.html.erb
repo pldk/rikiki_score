@@ -5,12 +5,13 @@
 
     <div class="flex items-center gap-3">
       <span class="text-sm text-gray-500 dark:text-gray-400">
-        🎯 <%= prediction.predicted_tricks %>
+        🏹 <%= prediction.predicted_tricks %>
       </span>
 
       <%= f.input :actual_tricks,
-            collection: (0..(prediction.round.position || 0)).to_a,
+            collection: (0..prediction.round.length),
             label: false,
+            prompt: "🎯",
             input_html: { class: "w-20 rounded-lg text-center border-gray-300 dark:bg-gray-700 dark:text-white",
                           data: { action: "change->auto-submit#submit" } } %>
 

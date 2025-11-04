@@ -31,15 +31,10 @@ class Prediction < ApplicationRecord
 
   validates :score, presence: true
   validate :only_one_star_per_phase
-  validate :total_predictions_cannot_equal_round_position
+  validate :total_predictions_cannot_equal_round_length
+  validate :total_actual_equal_round_length
 
   before_create :assign_position
-
-  delegate :phase, to: :round
-
-  # enum :phase, { up: 0, down: 1 }
-
-  # attribute :phase
 
   def only_one_star_per_phase
     return unless is_star
@@ -50,19 +45,31 @@ class Prediction < ApplicationRecord
                              .where.not(id: id)
                              .exists?
 
-    errors.add(:is_star, "déjà utilisée pendant la #{phase == :up ? 'montée' : 'descente'}") if already_used
+    errors.add(:is_star, "déjà utilisée pendant la #{round.phase == :up ? 'montée' : 'descente'}") if already_used
   end
 
-  def total_predictions_cannot_equal_round_position
+  def total_predictions_cannot_equal_round_length
     return unless round_id && predicted_tricks
 
     return unless round.predictions.count == round.game.players.count - 1
 
     total_predicted = round.predictions.sum(:predicted_tricks) + predicted_tricks
 
-    return unless total_predicted == round.position
+    return unless total_predicted == round.length
 
-    errors.add(:predicted_tricks, "le total des prédictions (#{total_predicted}) ne peut pas être égal à (#{round.position})")
+    errors.add(:predicted_tricks, "le total des annonces (#{total_predicted}) ne peut pas être égal à (#{round.length})")
+  end
+
+  def total_actual_equal_round_length
+    return unless round_id && actual_tricks
+
+    return unless round.predictions.count == round.game.players.count - 1
+
+    total_actual = round.predictions.sum(:actual_tricks) + actual_tricks
+
+    return unless total_actual != round.length
+
+    errors.add(:actual_tricks, "le total des annonces (#{total_actual}) doit être égal à (#{round.length})")
   end
 
   def calculate_score

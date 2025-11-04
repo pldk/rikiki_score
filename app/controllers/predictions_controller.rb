@@ -1,29 +1,31 @@
 # frozen_string_literal: true
 
 class PredictionsController < ApplicationController
-  before_action :set_round
+  before_action :set_game, :set_round
   before_action :set_prediction, only: [:update]
 
   def create
     @prediction = @round.predictions.build(prediction_params)
 
-    if @prediction.save
-      respond_to do |format|
-        format.turbo_stream
-        format.html { redirect_to game_round_path(@round.game, @round), notice: 'Prédiction enregistrée !' }
-      end
-    else
-      respond_to do |format|
+    respond_to do |format|
+      if @prediction.save
         format.turbo_stream do
           render turbo_stream: turbo_stream.replace(
-            dom_id(@prediction, :form),
+            "prediction_#{@round.id}_#{@prediction.player_id}",
             partial: 'predictions/form_predicted',
-            locals: { prediction: @prediction, round: @round, game: @round.game }
+            locals: { prediction: Prediction.new, round: @round, game: @round.game, player: @prediction.player }
           )
         end
-        format.html do
-          render 'rounds/show', status: :unprocessable_entity
+        format.html { redirect_to game_players_path(@round.game), notice: 'Annonce enregistrée !' }
+      else
+        format.turbo_stream do
+          render turbo_stream: turbo_stream.replace(
+            "prediction_#{@round.id}_#{@prediction.player_id}",
+            partial: 'predictions/form_predicted',
+            locals: { prediction: @prediction, round: @round, game: @round.game, player: @prediction.player }
+          )
         end
+        format.html { render 'games/players/index', status: :unprocessable_content, locals: { game: @round.game, players: @round.game.players } }
       end
     end
   end
@@ -31,14 +33,27 @@ class PredictionsController < ApplicationController
   def update
     return unless @prediction.update(prediction_params)
 
-    render turbo_stream: turbo_stream.replace(
-      "prediction_#{@prediction.round_id}_#{@prediction.player_id}",
-      partial: 'predictions/form_actual',
-      locals: { prediction: @prediction, game: @prediction.round.game }
-    )
+    respond_to do |format|
+      format.turbo_stream do
+        render turbo_stream: turbo_stream.replace(
+          "prediction_#{@round.id}_#{@prediction.player_id}",
+          partial: 'predictions/form_actual',
+          locals: { prediction: @prediction, round: @round, game: @round.game, player: @prediction.player }
+        )
+      end
+      if @prediction.save
+        format.html { redirect_to game_players_path(@round.game), notice: 'Annonce enregistrée !' }
+      else
+        format.html { render 'games/players/index', status: :unprocessable_content, locals: { game: @round.game, players: @round.game.players } }
+      end
+    end
   end
 
   private
+
+  def set_game
+    @game = Game.find(params[:game_id])
+  end
 
   def set_round
     @round = Round.find(params[:round_id])
