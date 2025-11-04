@@ -8,7 +8,7 @@ RSpec.describe 'Predictions', type: :request do
   let!(:round) { Round.create!(phase: 1, game: game, position: 5, length: 5) }
   let!(:prediction) { Prediction.create!(round: round, player: player, predicted_tricks: 2) }
 
-  before { game.players << player }
+  before { game.players << player_1 << player_2 }
 
   context 'when the prediction is valid' do
     describe 'POST /predictions#create' do
