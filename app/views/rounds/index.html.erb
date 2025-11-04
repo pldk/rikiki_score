@@ -1,4 +1,48 @@
-<div>
-  <h1 class="font-bold text-4xl">Rounds#index</h1>
-  <p>Find me in app/views/rounds/index.html.erb</p>
+<div class="container mx-auto p-4">
+  <h1 class="mb-4 text-4xl font-extrabold leading-none tracking-tight text-gray-900 md:text-5xl lg:text-6xl dark:text-white">
+    Partie #<%= @game.id %>
+  </h1>
+
+  <div class="relative overflow-x-auto shadow-md sm:rounded-lg">
+    <table class="w-full text-sm text-left text-gray-500 dark:text-gray-400">
+      <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+        <tr>
+          <th scope="col" class="px-6 py-3">Round</th>
+          <% @game.players.each do |player| %>
+            <th scope="col" class="px-6 py-3"><%= player.name %></th>
+          <% end %>
+          <th scope="col" class="px-6 py-3">Stat</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% @game.rounds.each do |round| %>
+          <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 border-gray-200 hover:bg-gray-50 dark:hover:bg-gray-600">
+            <!-- Round number -->
+            <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+              <%= round.position %>
+            </th>
+
+            <!-- Player predictions -->
+            <% @game.players.each do |player| %>
+              <% prediction = round.predictions.find { |p| p.player_id == player.id } %>
+              <td class="px-6 py-4">
+                <%= render "rounds/round_row",
+                      round: round,
+                      player: player,
+                      prediction: prediction,
+                      game: @game %>
+              </td>
+            <% end %>
+
+            <!-- Stat: différence entre cartes jouées et plis annoncés -->
+            <td class="px-6 py-4">
+              <% total_cartes = round.position || 0 %>
+              <% total_plis = round.predictions.sum(&:predicted_tricks) %>
+              <%= total_plis - total_cartes %>
+            </td>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+  </div>
 </div>

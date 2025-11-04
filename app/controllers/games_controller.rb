@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 class GamesController < ApplicationController
-  before_action :set_game, only: %i[show edit update destroy]
+  before_action :set_game, only: %i[show edit update destroy start]
   def index
     @games = Game.all
   end
@@ -41,9 +41,8 @@ class GamesController < ApplicationController
   end
 
   def start
-    @game = Game.find(params[:id])
-    @game.update(status: :active)
-    redirect_to game_rounds_path(@game), notice: 'La partie commence 🃏'
+    @game.start_game!
+    redirect_to game_players_path(@game), notice: 'La partie commence 🃏'
   end
 
   private
