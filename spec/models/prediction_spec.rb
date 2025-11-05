@@ -33,7 +33,7 @@ RSpec.describe Prediction, type: :model do
       last_pred = build(:prediction, round: round, player: players[3], predicted_tricks: 1)
 
       expect(last_pred).not_to be_valid
-      expect(last_pred.errors[:predicted_tricks]).to include(/le total des annonces/)
+      expect(last_pred.errors[:base]).to include(/le total des annonces/)
     end
 
     it 'allows prediction if total is different from round length' do

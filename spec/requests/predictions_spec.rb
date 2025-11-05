@@ -22,10 +22,10 @@ RSpec.describe 'Predictions', type: :request do
     describe 'PATCH /update actual_tricks' do
       it 'updates actual_tricks and redirects' do
         patch game_round_prediction_path(game, round, prediction),
-              params: { prediction: { actual_tricks: 1 } }
+              params: { prediction: { actual_tricks: 5 } }
 
         expect(response).to have_http_status(:redirect)
-        expect(prediction.reload.actual_tricks).to eq(1)
+        expect(prediction.reload.actual_tricks).to eq(5)
       end
     end
   end
