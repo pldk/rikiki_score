@@ -22,6 +22,8 @@ class Player < ApplicationRecord
   has_many :game_players, dependent: :destroy
   has_many :games, through: :game_players
 
+  has_many :scores, dependent: :destroy
+
   validates :name, presence: true
 
   def games_played
