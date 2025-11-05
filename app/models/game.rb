@@ -21,7 +21,7 @@ class Game < ApplicationRecord
 
   accepts_nested_attributes_for :players, reject_if: ->(attributes) { attributes['username'].blank? }
 
-  after_initialize :set_default_status, if: :new_record?
+  before_save :set_default_status, if: :new_record?
 
   enum :status, { pending: 0, active: 1, finished: 2, aborted: 3 }
   enum :style, { long: 0, short: 1 }
@@ -31,30 +31,55 @@ class Game < ApplicationRecord
   end
 
   def long_rounds
-    return 0 if players.empty?
+    return 0 if game_players.empty?
 
-    2 * (52 / players.size) + players.size - 2
+    2 * (52 / game_players.size) + game_players.size - 2
   end
 
   def short_rounds
-    2 * (52 / players.size) - 1
+    2 * (52 / game_players.size) - 1
   end
 
-  def round_count
-    total_rounds.size
-  end
-
-  def generate_rounds!
-    rounds.destroy_all
-
-    total = total_rounds
-
-    (1..total).each do |pos|
-      rounds.create!(position: pos)
+  def start_game!
+    transaction do
+      update!(status: :active)
+      create_rounds_with_trump_and_phase
     end
   end
 
   private
+
+  def mid
+    (total_rounds / 2.0).ceil
+  end
+
+  def half_span
+    (game_players.size / 2.0).floor
+  end
+
+  def max_cards
+    (52 / game_players.size).floor
+  end
+
+  def create_rounds_with_trump_and_phase
+    start_no_trump = mid - half_span
+    end_no_trump   = mid + half_span - 1
+
+    transaction do
+      (1..total_rounds).each do |position|
+        phase = position <= mid ? :up : :down
+
+        length = phase == :up ? [position, max_cards].min : [total_rounds - position + 1, max_cards].min
+
+        rounds.create!(
+          position: position,
+          phase: phase,
+          has_trump: !position.between?(start_no_trump, end_no_trump),
+          length: length
+        )
+      end
+    end
+  end
 
   def set_default_status
     self.status ||= :pending

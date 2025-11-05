@@ -8,4 +8,6 @@
   }
 }
 
-
+.items-center {
+  align-items: baseline;
+}

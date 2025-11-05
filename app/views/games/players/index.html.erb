@@ -19,7 +19,7 @@
           <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 border-gray-200 hover:bg-gray-50 dark:hover:bg-gray-600">
             <!-- Round number -->
             <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-              <%= round.position %>
+              <%= round.length %>
             </th>
   
             <!-- Player predictions -->
@@ -36,9 +36,9 @@
   
             <!-- Stat: différence entre cartes jouées et plis annoncés -->
             <td class="px-6 py-4">
-              <% total_cartes = round.position || 0 %>
+              <% total_cartes = round.length %>
               <% total_plis = round.predictions.sum(&:predicted_tricks) %>
-              <%= total_cartes - total_plis %>
+              <%= total_plis.zero? ? 0 : total_plis - total_cartes %>
             </td>
           </tr>
         <% end %>

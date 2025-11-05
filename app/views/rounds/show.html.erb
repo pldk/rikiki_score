@@ -1,7 +1,7 @@
 
 <div class="max-w-full overflow-x-auto"><h1 class="text-2xl font-bold mb-6">Manche #<%= @round.position %></h1>
 <div class="max-w-full overflow-x-auto">
-  <%= simple_form_for [:game, @round], url: game_round_path(@game, @round), method: :patch do |f| %>
+  <% simple_form_for [:game, @round], url: game_round_path(@game, @round), method: :patch do |f| %>
     <table class="min-w-full border border-gray-300 shadow rounded-lg text-center bg-white">
       <thead class="bg-gray-100">
         <tr>

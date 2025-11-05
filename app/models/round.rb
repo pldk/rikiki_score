@@ -28,8 +28,5 @@ class Round < ApplicationRecord
 
   accepts_nested_attributes_for :predictions
 
-  def phase
-    mid = game.total_rounds / 2.0
-    position <= mid ? :up : :down
-  end
+  enum :phase, { up: 0, down: 1 }
 end

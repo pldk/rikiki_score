@@ -1,44 +1,43 @@
 # frozen_string_literal: true
 
 class PredictionsController < ApplicationController
-  before_action :set_round
+  before_action :set_game, :set_round
   before_action :set_prediction, only: [:update]
 
   def create
     @prediction = @round.predictions.build(prediction_params)
 
     if @prediction.save
-      respond_to do |format|
-        format.turbo_stream
-        format.html { redirect_to game_round_path(@round.game, @round), notice: 'Prédiction enregistrée !' }
-      end
+      format_save
     else
-      respond_to do |format|
-        format.turbo_stream do
-          render turbo_stream: turbo_stream.replace(
-            dom_id(@prediction, :form),
-            partial: 'predictions/form_predicted',
-            locals: { prediction: @prediction, round: @round, game: @round.game }
-          )
-        end
-        format.html do
-          render 'rounds/show', status: :unprocessable_entity
-        end
-      end
+      format_new
     end
   end
 
   def update
     return unless @prediction.update(prediction_params)
 
-    render turbo_stream: turbo_stream.replace(
-      "prediction_#{@prediction.round_id}_#{@prediction.player_id}",
-      partial: 'predictions/form_actual',
-      locals: { prediction: @prediction, game: @prediction.round.game }
-    )
+    respond_to do |format|
+      format.turbo_stream do
+        render turbo_stream: turbo_stream.replace(
+          "prediction_#{@round.id}_#{@prediction.player_id}",
+          partial: 'predictions/form_actual',
+          locals: { prediction: @prediction, round: @round, game: @round.game, player: @prediction.player }
+        )
+      end
+      if @prediction.save
+        format.html { redirect_to game_players_path(@round.game), notice: 'Annonce enregistrée !' }
+      else
+        format.html { render 'games/players/index', status: :unprocessable_content, locals: { game: @round.game, players: @round.game.players } }
+      end
+    end
   end
 
   private
+
+  def set_game
+    @game = Game.find(params[:game_id])
+  end
 
   def set_round
     @round = Round.find(params[:round_id])
@@ -46,6 +45,32 @@ class PredictionsController < ApplicationController
 
   def set_prediction
     @prediction = Prediction.find(params[:id])
+  end
+
+  def format_save
+    respond_to do |format|
+      format.turbo_stream do
+        render turbo_stream: turbo_stream.replace(
+          "prediction_#{@round.id}_#{@prediction.player_id}",
+          partial: 'predictions/form_predicted',
+          locals: { prediction: Prediction.new, round: @round, game: @round.game, player: @prediction.player }
+        )
+      end
+      format.html { redirect_to game_players_path(@round.game), notice: 'Annonce enregistrée !' }
+    end
+  end
+
+  def format_new
+    respond_to do |format|
+      format.turbo_stream do
+        render turbo_stream: turbo_stream.replace(
+          "prediction_#{@round.id}_#{@prediction.player_id}",
+          partial: 'predictions/form_predicted',
+          locals: { prediction: @prediction, round: @round, game: @round.game, player: @prediction.player }
+        )
+      end
+      format.html { render 'games/players/index', status: :unprocessable_content, locals: { game: @round.game, players: @round.game.players } }
+    end
   end
 
   def prediction_params
