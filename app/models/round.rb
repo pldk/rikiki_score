@@ -25,6 +25,7 @@ class Round < ApplicationRecord
   belongs_to :game
   has_many :predictions, dependent: :destroy
   has_many :players, through: :predictions
+  has_many :scores, dependent: :destroy
 
   accepts_nested_attributes_for :predictions
 

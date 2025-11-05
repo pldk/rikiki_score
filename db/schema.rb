@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_10_29_140526) do
+ActiveRecord::Schema[8.0].define(version: 2025_11_05_093621) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -42,7 +42,6 @@ ActiveRecord::Schema[8.0].define(version: 2025_10_29_140526) do
   create_table "predictions", force: :cascade do |t|
     t.integer "predicted_tricks"
     t.integer "actual_tricks"
-    t.integer "score", default: 0
     t.boolean "is_star", default: false
     t.boolean "is_winner", default: false
     t.bigint "round_id", null: false
@@ -65,9 +64,25 @@ ActiveRecord::Schema[8.0].define(version: 2025_10_29_140526) do
     t.index ["game_id"], name: "index_rounds_on_game_id"
   end
 
+  create_table "scores", force: :cascade do |t|
+    t.integer "value", default: 0, null: false
+    t.integer "cumulative_value", default: 0, null: false
+    t.bigint "prediction_id", null: false
+    t.bigint "player_id", null: false
+    t.bigint "round_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["player_id"], name: "index_scores_on_player_id"
+    t.index ["prediction_id"], name: "index_scores_on_prediction_id"
+    t.index ["round_id"], name: "index_scores_on_round_id"
+  end
+
   add_foreign_key "game_players", "games"
   add_foreign_key "game_players", "players"
   add_foreign_key "predictions", "players"
   add_foreign_key "predictions", "rounds"
   add_foreign_key "rounds", "games"
+  add_foreign_key "scores", "players"
+  add_foreign_key "scores", "predictions"
+  add_foreign_key "scores", "rounds"
 end
