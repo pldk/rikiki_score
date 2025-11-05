@@ -20,14 +20,6 @@ RSpec.describe Prediction, type: :model do
     end
   end
 
-  describe 'validations' do
-    it 'validates presence of score' do
-      prediction.score = nil
-      expect(prediction).not_to be_valid
-      expect(prediction.errors[:score]).to include("can't be blank")
-    end
-  end
-
   describe '#total_predictions_cannot_equal_round_position' do
     let(:game) { create(:game, :with_players) }
     let(:round) { create(:round, game: game, length: 5) }

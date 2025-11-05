@@ -29,7 +29,6 @@ FactoryBot.define do
   factory :prediction do
     predicted_tricks { 1 }
     # actual_tricks { 1 }
-    score { 0 }
     is_star { false }
     is_winner { false }
     association :round

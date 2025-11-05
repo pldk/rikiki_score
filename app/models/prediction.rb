@@ -29,7 +29,8 @@ class Prediction < ApplicationRecord
   belongs_to :round
   belongs_to :player
 
-  validates :score, presence: true
+  has_one :score, dependent: :destroy
+
   validate :only_one_star_per_phase
   validate :total_predictions_cannot_equal_round_length
   validate :total_actual_equal_round_length
@@ -96,5 +97,32 @@ class Prediction < ApplicationRecord
 
   def assign_position
     self.position = round.position
+  end
+
+  private
+
+  def update_score_record
+    score_value = calculate_score
+    score_record = Score.find_or_initialize_by(prediction: self)
+    score_record.assign_attributes(
+      player: player,
+      round: round,
+      value: score_value
+    )
+    score_record.save!
+    update_cumulative_for_game
+  end
+
+  def update_cumulative_for_game
+    total = 0
+    game = round.game
+
+    game.rounds.order(:position).each do |r|
+      score = Score.find_by(round: r, player: player)
+      next unless score
+
+      total += score.value
+      score.update!(cumulative_value: total)
+    end
   end
 end
