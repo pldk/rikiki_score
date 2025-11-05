@@ -29,12 +29,14 @@ class Prediction < ApplicationRecord
   belongs_to :round
   belongs_to :player
 
-  validates :score, presence: true
+  has_one :score, dependent: :destroy
+
   validate :only_one_star_per_phase
   validate :total_predictions_cannot_equal_round_length
   validate :total_actual_equal_round_length
 
   before_create :assign_position
+  after_update :update_score_record
 
   def only_one_star_per_phase
     return unless is_star
@@ -57,19 +59,21 @@ class Prediction < ApplicationRecord
 
     return unless total_predicted == round.length
 
-    errors.add(:predicted_tricks, "le total des annonces (#{total_predicted}) ne peut pas être égal à (#{round.length})")
+    errors.add(:base, "le total des annonces ne peut pas être égal à #{round.length}")
   end
 
   def total_actual_equal_round_length
     return unless round_id && actual_tricks
+    return unless ready_for_final_actuals?
 
-    return unless round.predictions.count == round.game.players.count - 1
+    total_actual = round.predictions.sum(:actual_tricks).to_i + actual_tricks.to_i
 
-    total_actual = round.predictions.sum(:actual_tricks) + actual_tricks
+    errors.add(:base, "le total des annonces doit être égal à #{round.length}") if total_actual != round.length
+  end
 
-    return unless total_actual != round.length
-
-    errors.add(:actual_tricks, "le total des annonces (#{total_actual}) doit être égal à (#{round.length})")
+  def ready_for_final_actuals?
+    filled_actuals = round.predictions.where.not(actual_tricks: nil).count
+    filled_actuals == round.game.players.count - 1
   end
 
   def calculate_score
@@ -96,5 +100,48 @@ class Prediction < ApplicationRecord
 
   def assign_position
     self.position = round.position
+  end
+
+  private
+
+  def update_score_record
+    score_value = calculate_score
+    score_record = Score.find_or_initialize_by(prediction: self)
+    score_record.assign_attributes(
+      player: player,
+      round: round,
+      value: score_value
+    )
+    score_record.save!
+    update_cumulative_for_game
+  end
+
+  def update_cumulative_for_game
+    previous_total = previous_cumulative_total
+    score_record = current_score_record
+    score_record.update!(cumulative_value: previous_total + score_record.value)
+    update_future_cumulatives(score_record.cumulative_value)
+  end
+
+  def previous_cumulative_total
+    previous_round = round.game.rounds.where('position < ?', round.position).order(:position).last
+    return 0 unless previous_round
+
+    previous_score = previous_round.scores.find_by(player: player)
+    previous_score&.cumulative_value || 0
+  end
+
+  def current_score_record
+    score || Score.find_by(prediction: self)
+  end
+
+  def update_future_cumulatives(previous_total)
+    round.game.rounds.where('position > ?', round.position).order(:position).each do |r|
+      next_score = Score.find_by(round: r, player: player)
+      next unless next_score
+
+      previous_total += next_score.value
+      next_score.update!(cumulative_value: previous_total)
+    end
   end
 end

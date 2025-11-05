@@ -14,6 +14,8 @@
 class Game < ApplicationRecord
   has_many :rounds, dependent: :destroy
   has_many :predictions, through: :rounds
+  has_many :scores, through: :rounds
+
   accepts_nested_attributes_for :rounds
 
   has_many :game_players, dependent: :destroy

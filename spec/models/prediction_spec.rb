@@ -20,14 +20,6 @@ RSpec.describe Prediction, type: :model do
     end
   end
 
-  describe 'validations' do
-    it 'validates presence of score' do
-      prediction.score = nil
-      expect(prediction).not_to be_valid
-      expect(prediction.errors[:score]).to include("can't be blank")
-    end
-  end
-
   describe '#total_predictions_cannot_equal_round_position' do
     let(:game) { create(:game, :with_players) }
     let(:round) { create(:round, game: game, length: 5) }
@@ -41,7 +33,7 @@ RSpec.describe Prediction, type: :model do
       last_pred = build(:prediction, round: round, player: players[3], predicted_tricks: 1)
 
       expect(last_pred).not_to be_valid
-      expect(last_pred.errors[:predicted_tricks]).to include(/le total des annonces/)
+      expect(last_pred.errors[:base]).to include(/le total des annonces/)
     end
 
     it 'allows prediction if total is different from round length' do

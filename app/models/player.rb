@@ -17,6 +17,7 @@ class Player < ApplicationRecord
 
   has_many :predictions, dependent: :destroy
   has_many :rounds, through: :predictions
+  has_many :scores, through: :predictions
 
   has_many :game_players, dependent: :destroy
   has_many :games, through: :game_players
@@ -37,5 +38,19 @@ class Player < ApplicationRecord
 
   def capitalize_name
     name.capitalize if name.present?
+  end
+
+  def total_score_for(game)
+    scores.joins(:round).where(rounds: { game_id: game.id }).sum(:value)
+  end
+
+  def cumulative_scores
+    scores = {}
+    total = 0
+    predictions.joins(:round).order('rounds.position ASC').each do |prediction|
+      total += prediction.score || 0
+      scores[prediction.round_id] = total
+    end
+    scores
   end
 end

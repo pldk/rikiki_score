@@ -25,10 +25,9 @@
             as: :boolean,
             label: "⭐️",
             input_html: { class: "w-4 h-4 text-yellow-500 border-gray-300 rounded",
-                          data: { action: "change->auto-submit#submit" },
                           disabled: star_disabled } %>
 
-      <%= f.submit "Go",
+      <% f.submit "Go",
             class: "px-3 py-1 text-xs font-semibold text-white bg-blue-600 rounded-lg hover:bg-blue-700" %>
     </div>
   <% end %>
