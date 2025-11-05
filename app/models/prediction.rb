@@ -117,14 +117,26 @@ class Prediction < ApplicationRecord
   end
 
   def update_cumulative_for_game
-    game = round.game
-    previous_round = game.rounds.where('position < ?', round.position).order(:position).last
-    previous_total = previous_round&.scores&.find_by(player: player)&.cumulative_value || 0
-
-    score_record = score || Score.find_by(prediction: self)
+    previous_total = previous_cumulative_total
+    score_record = current_score_record
     score_record.update!(cumulative_value: previous_total + score_record.value)
+    update_future_cumulatives(score_record.cumulative_value)
+  end
 
-    game.rounds.where('position > ?', round.position).order(:position).each do |r|
+  def previous_cumulative_total
+    previous_round = round.game.rounds.where('position < ?', round.position).order(:position).last
+    return 0 unless previous_round
+
+    previous_score = previous_round.scores.find_by(player: player)
+    previous_score&.cumulative_value || 0
+  end
+
+  def current_score_record
+    score || Score.find_by(prediction: self)
+  end
+
+  def update_future_cumulatives(previous_total)
+    round.game.rounds.where('position > ?', round.position).order(:position).each do |r|
       next_score = Score.find_by(round: r, player: player)
       next unless next_score
 
