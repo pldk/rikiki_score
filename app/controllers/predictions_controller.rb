@@ -7,26 +7,10 @@ class PredictionsController < ApplicationController
   def create
     @prediction = @round.predictions.build(prediction_params)
 
-    respond_to do |format|
-      if @prediction.save
-        format.turbo_stream do
-          render turbo_stream: turbo_stream.replace(
-            "prediction_#{@round.id}_#{@prediction.player_id}",
-            partial: 'predictions/form_predicted',
-            locals: { prediction: Prediction.new, round: @round, game: @round.game, player: @prediction.player }
-          )
-        end
-        format.html { redirect_to game_players_path(@round.game), notice: 'Annonce enregistrée !' }
-      else
-        format.turbo_stream do
-          render turbo_stream: turbo_stream.replace(
-            "prediction_#{@round.id}_#{@prediction.player_id}",
-            partial: 'predictions/form_predicted',
-            locals: { prediction: @prediction, round: @round, game: @round.game, player: @prediction.player }
-          )
-        end
-        format.html { render 'games/players/index', status: :unprocessable_content, locals: { game: @round.game, players: @round.game.players } }
-      end
+    if @prediction.save
+      format_save
+    else
+      format_new
     end
   end
 
@@ -61,6 +45,32 @@ class PredictionsController < ApplicationController
 
   def set_prediction
     @prediction = Prediction.find(params[:id])
+  end
+
+  def format_save
+    respond_to do |format|
+      format.turbo_stream do
+        render turbo_stream: turbo_stream.replace(
+          "prediction_#{@round.id}_#{@prediction.player_id}",
+          partial: 'predictions/form_predicted',
+          locals: { prediction: Prediction.new, round: @round, game: @round.game, player: @prediction.player }
+        )
+      end
+      format.html { redirect_to game_players_path(@round.game), notice: 'Annonce enregistrée !' }
+    end
+  end
+
+  def format_new
+    respond_to do |format|
+      format.turbo_stream do
+        render turbo_stream: turbo_stream.replace(
+          "prediction_#{@round.id}_#{@prediction.player_id}",
+          partial: 'predictions/form_predicted',
+          locals: { prediction: @prediction, round: @round, game: @round.game, player: @prediction.player }
+        )
+      end
+      format.html { render 'games/players/index', status: :unprocessable_content, locals: { game: @round.game, players: @round.game.players } }
+    end
   end
 
   def prediction_params
