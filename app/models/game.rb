@@ -49,23 +49,27 @@ class Game < ApplicationRecord
 
   private
 
+  def mid
+    (total_rounds / 2.0).ceil
+  end
+
+  def half_span
+    (game_players.size / 2.0).floor
+  end
+
+  def max_cards
+    (52 / game_players.size).floor
+  end
+
   def create_rounds_with_trump_and_phase
-    mid = (total_rounds / 2.0).ceil
-    half_span = (game_players.size / 2.0).floor
     start_no_trump = mid - half_span
     end_no_trump   = mid + half_span - 1
-
-    max_cards = (52 / game_players.size).floor
 
     transaction do
       (1..total_rounds).each do |position|
         phase = position <= mid ? :up : :down
 
-        length = if phase == :up
-                   [position, max_cards].min
-                 else
-                   [total_rounds - position + 1, max_cards].min
-                 end
+        length = phase == :up ? [position, max_cards].min : [total_rounds - position + 1, max_cards].min
 
         rounds.create!(
           position: position,
