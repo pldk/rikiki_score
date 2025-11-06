@@ -23,7 +23,7 @@ class Game < ApplicationRecord
 
   accepts_nested_attributes_for :players, reject_if: ->(attributes) { attributes['username'].blank? }
 
-  after_initialize :set_default_status, if: :new_record?
+  before_save :set_default_status, if: :new_record?
 
   enum :status, { pending: 0, active: 1, finished: 2, aborted: 3 }
   enum :style, { long: 0, short: 1 }
