@@ -36,7 +36,7 @@ class Prediction < ApplicationRecord
   validate :total_actual_equal_round_length
 
   before_create :assign_position
-  after_update :update_score_record
+  after_update :check_if_game_finished, :update_score_record
 
   def only_one_star_per_phase
     return unless is_star
@@ -143,5 +143,14 @@ class Prediction < ApplicationRecord
       previous_total += next_score.value
       next_score.update!(cumulative_value: previous_total)
     end
+  end
+
+  def check_if_game_finished
+    return if actual_tricks.blank?
+
+    game = round.game
+    return unless round == game.last_round
+
+    game.check_if_finished!
   end
 end
