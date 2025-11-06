@@ -97,8 +97,6 @@ class Game < ApplicationRecord
     end
   end
 
-  private
-
   def set_default_status
     self.status ||= :pending
   end
