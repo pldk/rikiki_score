@@ -49,6 +49,20 @@ class Game < ApplicationRecord
     end
   end
 
+  def last_round
+    rounds.find_by(phase: 'down', length: 1)
+  end
+
+  def check_if_finished!
+    last = last_round
+    return unless last
+
+    if last.predictions.count == players.count &&
+       last.predictions.where(actual_tricks: nil).none?
+      update!(status: :finished)
+    end
+  end
+
   private
 
   def mid
