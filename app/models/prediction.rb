@@ -78,9 +78,8 @@ class Prediction < ApplicationRecord
 
   def calculate_score
     multiplier = is_star? ? 4 : 2
-
     if predicted_tricks == actual_tricks
-      10 + multiplier * predicted_tricks
+      full_prediction_bonus? ? 10 + multiplier * 2 * predicted_tricks : 10 + multiplier * predicted_tricks
     else
       -multiplier * (predicted_tricks - actual_tricks).abs
     end
@@ -100,6 +99,10 @@ class Prediction < ApplicationRecord
 
   def assign_position
     self.position = round.position
+  end
+
+  def full_prediction_bonus?
+    predicted_tricks == round.length && ![round.game.rounds.minimum(:position), round.game.rounds.maximum(:position)].include?(round.position)
   end
 
   private

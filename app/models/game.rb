@@ -49,6 +49,15 @@ class Game < ApplicationRecord
     end
   end
 
+  def active_round
+    last = rounds.select { |r| r.predictions.any? }.last
+    last.position + 1
+  end
+
+  def round_modifiable?(round)
+    active_round == round
+  end
+
   def last_round
     rounds.find_by(phase: 'down', length: 1)
   end
