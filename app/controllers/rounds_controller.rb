@@ -29,32 +29,6 @@ class RoundsController < ApplicationController
     @predictions = @round.predictions.includes(:player)
   end
 
-  # def edit
-  #   @round = @game.rounds.find(params[:id])
-  #   @predictions = @round.predictions.includes(:player)
-  #   @players = @game.players.order(:id)
-  #   @predictions_by_player = @predictions.group_by(&:player_id)
-  #   @predictions_by_player.each do |player_id, predictions|
-  #     # Sort predictions by their position in the round
-  #     @predictions_by_player[player_id] = predictions.sort_by(&:position)
-  #   end
-  #   @predictions_by_player = @predictions_by_player.sort_by { |_, predictions| predictions.first.position }
-  #   @predictions_by_player = Hash[@predictions_by_player]
-  # end
-
-  # def update
-  #   @round = Round.find(params[:id])
-  #   params[:predictions]&.each do |id, attrs|
-  #     prediction = Prediction.find(id)
-  #     prediction.update(
-  #       predicted_tricks: attrs[:predicted_tricks],
-  #       actual_tricks: attrs[:actual_tricks],
-  #       is_star: ActiveModel::Type::Boolean.new.cast(attrs[:is_star])
-  #     )
-  #   end
-  #   redirect_to game_round_path(@round.game, @round), notice: "Prédictions mises à jour"
-  # end
-
   private
 
   def round_params
