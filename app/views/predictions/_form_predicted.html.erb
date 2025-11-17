@@ -14,8 +14,7 @@
             label: false,
             prompt: "🏹",
             input_html: { class: "w-20 rounded-lg text-center border-gray-300 dark:bg-gray-700 dark:text-white",
-                          data: { action: "change->auto-submit#submit" },
-                          disabled: !game.round_modifiable?(round) } %>
+                          data: { action: "change->auto-submit#submit" } } %>
 
       <% star_disabled = Prediction.joins(:round)
           .where(player_id: player, is_star: true)
