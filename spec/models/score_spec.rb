@@ -16,7 +16,7 @@ RSpec.describe 'Prediction and Score integration', type: :model do
   describe 'Score creation' do
     it 'creates a score automatically when a prediction is saved' do
       prediction = Prediction.create!(round: first_round, player: player, predicted_tricks: 2, actual_tricks: 2)
-      
+
       expect(prediction.score).to be_present
       expect(prediction.score.value).to eq(prediction.calculate_score)
       expect(prediction.score.round).to eq(first_round)
@@ -25,7 +25,6 @@ RSpec.describe 'Prediction and Score integration', type: :model do
   end
 
   describe 'Score calculation' do
-
     context 'without star' do
       it 'calculates normal score when prediction matches actual_tricks' do
         prediction = Prediction.new(round: middle_round, player: player, predicted_tricks: 2, actual_tricks: 2, is_star: false)
@@ -75,7 +74,6 @@ RSpec.describe 'Prediction and Score integration', type: :model do
 
       p2 = Prediction.create!(round: middle_round, player: player, predicted_tricks: 1)
       p2.update!(actual_tricks: 1)
-
 
       expect(p1.score.cumulative_value).to eq(p1.score.value)
       expect(p2.score.cumulative_value).to eq(p1.score.cumulative_value + p2.score.value)

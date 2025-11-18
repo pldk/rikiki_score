@@ -110,8 +110,8 @@ class Prediction < ApplicationRecord
   private
 
   def update_score_record
-    return unless actual_tricks.present? 
-    
+    return if actual_tricks.blank?
+
     score_value = calculate_score
     score_record = Score.find_or_initialize_by(prediction: self)
     score_record.assign_attributes(
