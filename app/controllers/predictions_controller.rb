@@ -39,11 +39,18 @@ class PredictionsController < ApplicationController
   def format_saved
     respond_to do |format|
       format.turbo_stream do
-        render turbo_stream: turbo_stream.replace(
-          "prediction_#{@round.id}_#{@prediction.player_id}",
-          partial: 'rounds/round_row',
-          locals: { prediction: @prediction, round: @round, game: @round.game, player: @prediction.player }
-        )
+        render turbo_stream: [
+          turbo_stream.replace(
+            "prediction_#{@round.id}_#{@prediction.player_id}",
+            partial: 'rounds/round_row',
+            locals: { prediction: @prediction, round: @round, game: @round.game, player: @prediction.player }
+          ),
+          turbo_stream.replace(
+            "round_stats_#{@round.id}",
+            partial: 'rounds/round_stats',
+            locals: { round: @round }
+          )
+        ]
       end
       format.html { redirect_to game_players_path(@round.game), notice: 'Annonce enregistrée !' }
     end

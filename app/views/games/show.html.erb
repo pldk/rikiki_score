@@ -36,9 +36,7 @@
 
             <!-- Stat: différence entre cartes jouées et plis annoncés -->
             <td class="px-6 py-4">
-              <% total_cartes = round.position || 0 %>
-              <% total_plis = round.predictions.sum(&:predicted_tricks) %>
-              <%= total_plis - total_cartes %>
+              <%= render "rounds/round_stats", round: round %>
             </td>
           </tr>
         <% end %>

@@ -49,6 +49,24 @@ class Game < ApplicationRecord
     end
   end
 
+  # def active_round
+  #   rounds.order(:position).detect do |r|
+  #     # Round actif = celui où au moins une prédiction n’a pas encore été annoncée
+  #     r.predictions.any? { |p| p.predicted_tricks.nil? }
+  #   end ||
+  #   # Si toutes les annonces sont faites, on prend le premier round
+  #   # dont toutes les predictions sont remplies mais au moins une actual_trick est vide
+  #   rounds.order(:position).detect do |r|
+  #     r.predictions.all? { |p| p.predicted_tricks.present? } &&
+  #       r.predictions.any? { |p| p.actual_tricks.nil? }
+  #   end ||
+  #   rounds.last
+  # end
+
+  # def round_modifiable?(round)
+  #   active_round == round
+  # end
+
   def last_round
     rounds.find_by(phase: 'down', length: 1)
   end

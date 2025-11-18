@@ -26,24 +26,27 @@
             <% @game.players.each do |player| %>
               <% prediction = round.predictions.find_by(player: player) %>
               <td class="px-6 py-4">
-                <%= render "rounds/round_row",
-                      round: round,
-                      player: player,
-                      prediction: prediction,
-                      game: @game %>
+                <%= turbo_frame_tag "prediction_#{round.id}_#{player.id}" do %>
+                  <%= render "rounds/round_row",
+                        round: round,
+                        player: player,
+                        prediction: prediction,
+                        game: @game %>
+                <% end %>
               </td>
             <% end %>
-  
-            <!-- Stat: différence entre cartes jouées et plis annoncés -->
-            <td class="px-6 py-4">
-              <% total_cartes = round.length %>
-              <% total_plis = round.predictions.sum(&:predicted_tricks) %>
-              <%= total_plis.zero? ? 0 : total_plis - total_cartes %>
+            <!-- stats for the round -->
+            <td class="px-6 py-4 font-semibold text-center">
+              <%= turbo_frame_tag "round_stats_#{round.id}" do %>
+                <%= render "rounds/round_stats", round: round %>
+              <% end %>
             </td>
+            
           </tr>
         <% end %>
       </tbody>
     </table>
   </div>
-  
+  <%= link_to "Go to scoreboards", @game, class: "btn btn-primary" if @game.finished? %>
+  <button class="text-white bg-brand box-border border border-transparent rounded-base text-sm px-4 py-2.5">"Go to menu"</button>
 </div>

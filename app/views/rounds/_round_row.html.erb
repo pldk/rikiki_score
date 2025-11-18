@@ -1,17 +1,5 @@
-<%= turbo_frame_tag "prediction_#{round.id}_#{player.id}" do %>
-  <%# Déterminer la couleur de fond selon la prédiction %>
-  <% bg_class =
-    if prediction.nil?
-      "bg-blue-50 dark:bg-blue-900/40"
-    elsif prediction.actual_tricks.nil?
-      "bg-yellow-50 dark:bg-yellow-900/40"
-    elsif prediction.actual_tricks == prediction.predicted_tricks
-      "bg-green-100 dark:bg-green-900/40"
-    else
-      "bg-red-100 dark:bg-red-900/40"
-    end %>
-
-  <div class="p-2 rounded-lg transition-colors duration-300 <%= bg_class %>">
+<%= turbo_frame_tag "prediction_#{round.id}_#{player.id}" do %>    
+  <div class="p-2 rounded-lg transition-colors duration-300 <%= bg_class prediction %>">
     <% if prediction.present? && prediction.actual_tricks.present? %>
       <!-- actual_tricks déjà rempli : affichage seulement -->
       <span class="text-center block text-black dark:text-gray-100 font-semibold">
