@@ -62,7 +62,7 @@ class Game < ApplicationRecord
   #   end ||
   #   rounds.last
   # end
-  
+
   # def round_modifiable?(round)
   #   active_round == round
   # end
