@@ -47,5 +47,6 @@
       </tbody>
     </table>
   </div>
-  
+  <%= link_to "Go to scoreboards", @game, class: "btn btn-primary" if @game.finished? %>
+  <button class="text-white bg-brand box-border border border-transparent rounded-base text-sm px-4 py-2.5">"Go to menu"</button>
 </div>

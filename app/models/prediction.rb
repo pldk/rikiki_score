@@ -34,9 +34,11 @@ class Prediction < ApplicationRecord
   validate :only_one_star_per_phase
   validate :total_predictions_cannot_equal_round_length
   validate :total_actual_equal_round_length
+  # validate :assign_last_round_star
 
   before_create :assign_position
-  after_update :check_if_game_finished, :update_score_record
+  after_update :check_if_game_finished
+  after_save :update_score_record
 
   def only_one_star_per_phase
     return unless is_star
@@ -108,6 +110,8 @@ class Prediction < ApplicationRecord
   private
 
   def update_score_record
+    return unless actual_tricks.present? 
+    
     score_value = calculate_score
     score_record = Score.find_or_initialize_by(prediction: self)
     score_record.assign_attributes(
@@ -156,4 +160,31 @@ class Prediction < ApplicationRecord
 
     game.check_if_finished!
   end
+
+  # def assign_last_round_star
+  #   return if is_star? # déjà défini manuellement
+
+  #   game = round.game
+
+  #   # Toutes les prédictions précédentes du joueur sur cette partie
+  #   previous_predictions = Prediction
+  #                          .joins(:round)
+  #                          .where(player_id: player_id, rounds: { game_id: game.id })
+  #                          .where('rounds.position < ?', round.position)
+
+  #   # Si le joueur a déjà joué une étoile → on ne force pas
+  #   return if previous_predictions.any?(&:is_star?)
+
+  #   # Trouver les rounds extrêmes (montee et descente)
+  #   last_up = game.rounds.where(phase: 'up').last
+  #   last_down = game.rounds.where(phase: 'down').last
+
+  #   is_last_up = round.length == last_up
+  #   is_last_down = round.length == last_down
+
+  #   # Si c'est l'un des derniers tours
+  #   return unless is_last_up || is_last_down
+
+  #   self.is_star = true
+  # end
 end
