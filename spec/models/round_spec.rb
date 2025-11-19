@@ -4,23 +4,20 @@
 #
 # Table name: rounds
 #
-#  id         :bigint           not null, primary key
-#  has_trump  :boolean          default(TRUE)
+#  id         :integer          not null, primary key
 #  length     :integer
-#  phase      :integer          default(0)
 #  position   :integer
+#  game_id    :integer          not null
+#  has_trump  :boolean          default(TRUE)
 #  created_at :datetime         not null
 #  updated_at :datetime         not null
-#  game_id    :bigint           not null
+#  phase      :integer
 #
 # Indexes
 #
 #  index_rounds_on_game_id  (game_id)
 #
-# Foreign Keys
-#
-#  fk_rails_...  (game_id => games.id)
-#
+
 require 'rails_helper'
 
 RSpec.describe Round, type: :model do

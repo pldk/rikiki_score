@@ -10,68 +10,69 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_11_05_093621) do
+ActiveRecord::Schema[8.1].define(version: 2025_11_19_101956) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
   create_table "game_players", force: :cascade do |t|
+    t.datetime "created_at", null: false
     t.bigint "game_id", null: false
     t.bigint "player_id", null: false
-    t.datetime "created_at", null: false
+    t.integer "position"
     t.datetime "updated_at", null: false
     t.index ["game_id"], name: "index_game_players_on_game_id"
     t.index ["player_id"], name: "index_game_players_on_player_id"
   end
 
   create_table "games", force: :cascade do |t|
-    t.integer "status", default: 0
     t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.integer "style"
     t.boolean "stars", default: false
+    t.integer "status", default: 0
+    t.integer "style"
+    t.datetime "updated_at", null: false
   end
 
   create_table "players", force: :cascade do |t|
-    t.string "name"
-    t.string "description"
-    t.integer "rank"
     t.datetime "created_at", null: false
+    t.string "description"
+    t.string "name"
+    t.integer "rank"
     t.datetime "updated_at", null: false
   end
 
   create_table "predictions", force: :cascade do |t|
-    t.integer "predicted_tricks"
     t.integer "actual_tricks"
+    t.datetime "created_at", null: false
     t.boolean "is_star", default: false
     t.boolean "is_winner", default: false
-    t.bigint "round_id", null: false
     t.bigint "player_id", null: false
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
     t.integer "position"
+    t.integer "predicted_tricks"
+    t.bigint "round_id", null: false
+    t.datetime "updated_at", null: false
     t.index ["player_id"], name: "index_predictions_on_player_id"
     t.index ["round_id"], name: "index_predictions_on_round_id"
   end
 
   create_table "rounds", force: :cascade do |t|
-    t.integer "length"
-    t.integer "position"
+    t.datetime "created_at", null: false
     t.bigint "game_id", null: false
     t.boolean "has_trump", default: true
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.integer "length"
     t.integer "phase"
+    t.integer "position"
+    t.datetime "updated_at", null: false
     t.index ["game_id"], name: "index_rounds_on_game_id"
   end
 
   create_table "scores", force: :cascade do |t|
-    t.integer "value", default: 0, null: false
-    t.integer "cumulative_value", default: 0, null: false
-    t.bigint "prediction_id", null: false
-    t.bigint "player_id", null: false
-    t.bigint "round_id", null: false
     t.datetime "created_at", null: false
+    t.integer "cumulative_value", default: 0, null: false
+    t.bigint "player_id", null: false
+    t.bigint "prediction_id", null: false
+    t.bigint "round_id", null: false
     t.datetime "updated_at", null: false
+    t.integer "value", default: 0, null: false
     t.index ["player_id"], name: "index_scores_on_player_id"
     t.index ["prediction_id"], name: "index_scores_on_prediction_id"
     t.index ["round_id"], name: "index_scores_on_round_id"

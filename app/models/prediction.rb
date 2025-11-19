@@ -4,27 +4,23 @@
 #
 # Table name: predictions
 #
-#  id               :bigint           not null, primary key
+#  id               :integer          not null, primary key
+#  predicted_tricks :integer
 #  actual_tricks    :integer
 #  is_star          :boolean          default(FALSE)
 #  is_winner        :boolean          default(FALSE)
-#  predicted_tricks :integer
-#  score            :integer          default(0)
+#  round_id         :integer          not null
+#  player_id        :integer          not null
 #  created_at       :datetime         not null
 #  updated_at       :datetime         not null
-#  player_id        :bigint           not null
-#  round_id         :bigint           not null
+#  position         :integer
 #
 # Indexes
 #
 #  index_predictions_on_player_id  (player_id)
 #  index_predictions_on_round_id   (round_id)
 #
-# Foreign Keys
-#
-#  fk_rails_...  (player_id => players.id)
-#  fk_rails_...  (round_id => rounds.id)
-#
+
 class Prediction < ApplicationRecord
   belongs_to :round
   belongs_to :player
