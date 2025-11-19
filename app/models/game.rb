@@ -18,7 +18,7 @@ class Game < ApplicationRecord
 
   accepts_nested_attributes_for :rounds
 
-  has_many :game_players, dependent: :destroy
+  has_many :game_players, -> { order(:position) }, dependent: :destroy
   has_many :players, through: :game_players
 
   accepts_nested_attributes_for :players, reject_if: ->(attributes) { attributes['username'].blank? }

@@ -15,8 +15,12 @@ module Games
 
     def create
       player = Player.find_or_create_by(name: player_params[:name])
-      @game.players << player unless @game.players.include?(player)
 
+      unless @game.players.include?(player)
+        position = @game.game_players.count
+        @game.game_players.create!(player: player, position: position)
+      end
+      
       respond_to do |format|
         format.turbo_stream
         format.html { redirect_to new_game_player_path(@game) }
@@ -24,8 +28,12 @@ module Games
     end
 
     def destroy
-      player = @game.players.find(params[:id])
-      @game.players.delete(player)
+      player = @game.game_players.find_by(player_id: params[:id])
+      @game.game_players.delete(player)
+
+      @game.game_players.order(:position).each_with_index do |game_player, index|
+        game_player.update_column(:position, index)
+      end
 
       respond_to do |format|
         format.turbo_stream
