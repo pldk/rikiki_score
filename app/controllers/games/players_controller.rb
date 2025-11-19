@@ -20,7 +20,7 @@ module Games
         position = @game.game_players.count
         @game.game_players.create!(player: player, position: position)
       end
-      
+
       respond_to do |format|
         format.turbo_stream
         format.html { redirect_to new_game_player_path(@game) }
