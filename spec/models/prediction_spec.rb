@@ -11,7 +11,6 @@
 #  player_id        :integer          not null
 #  created_at       :datetime         not null
 #  updated_at       :datetime         not null
-#  position         :integer
 #
 # Indexes
 #
@@ -138,17 +137,6 @@ RSpec.describe Prediction, type: :model do
       descending_prediction = create(:prediction, round: descending_round, player: game.players.first)
 
       expect(descending_prediction.round.phase).to eq('down')
-    end
-  end
-
-  describe 'position assignment' do
-    let(:round) { create(:round, game: game, position: 7) }
-    let(:prediction) { build(:prediction, round: round, player: player) }
-
-    it 'assigns round position before creation' do
-      expect { prediction.save }
-        .to change(prediction, :position)
-        .from(nil).to(round.position)
     end
   end
 end

@@ -1,22 +1,36 @@
-<%= turbo_frame_tag "prediction_#{round.id}_#{player.id}" do %>    
-  <div class="p-2 rounded-lg transition-colors duration-300 <%= bg_class prediction %>">
+<%= turbo_frame_tag "prediction_#{round.id}_#{player.id}" do %>
+  <div class="p-3 rounded-lg transition-colors duration-300 <%= bg_class(prediction) %> hover:shadow-sm text-center">
+
     <% if prediction.present? && prediction.actual_tricks.present? %>
-      <!-- actual_tricks déjà rempli : affichage seulement -->
-      <span class="text-center block text-black dark:text-gray-100 font-semibold">
-        🏹 <%= prediction.predicted_tricks %> | 🎯 <%= prediction.actual_tricks %> |  <%= prediction.score&.cumulative_value %>
-      </span>
+      <!-- Actual tricks remplis -->
+      <div class="flex justify-center items-center space-x-2 text-sm font-semibold text-gray-900 dark:text-gray-100">
+        <span>🏹 <%= prediction.predicted_tricks %></span>
+        <span>🎯 <%= prediction.actual_tricks %></span>
+        <span><%= prediction.score&.cumulative_value || "-" %></span>
+
+        <% if prediction.is_star? %>
+          <% if prediction.actual_tricks == prediction.predicted_tricks %>
+            <span class="text-green-500" title="Star réussie">★</span>
+          <% else %>
+            <span class="text-red-500" title="Star ratée">★</span>
+          <% end %>
+        <% elsif prediction.actual_tricks != prediction.predicted_tricks %>
+          <span class="ml-1 text-red-500 font-bold">•</span>
+        <% end %>
+      </div>
+
     <% elsif prediction.present? %>
-      <!-- actual_tricks non rempli : formulaire -->
-      <%= render "predictions/form_actual",
-            prediction: prediction,
-            game: game %>
+      <!-- Formulaire pour remplir actual_tricks -->
+      <div class="flex justify-center">
+        <%= render "predictions/form_actual", prediction: prediction, game: game %>
+      </div>
+
     <% else %>
-      <!-- prédiction non existante : formulaire prédiction -->
-      <%= render "predictions/form_predicted",
-            round: round,
-            player: player,
-            game: game,
-            prediction: Prediction.new %>
+      <!-- Formulaire pour nouvelle prédiction -->
+      <div class="flex justify-center">
+        <%= render "predictions/form_predicted", round: round, player: player, game: game, prediction: Prediction.new %>
+      </div>
     <% end %>
+    
   </div>
 <% end %>

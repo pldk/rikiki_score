@@ -13,7 +13,6 @@
 #  player_id        :integer          not null
 #  created_at       :datetime         not null
 #  updated_at       :datetime         not null
-#  position         :integer
 #
 # Indexes
 #
@@ -32,7 +31,6 @@ class Prediction < ApplicationRecord
   validate :total_actual_equal_round_length
   # validate :assign_last_round_star
 
-  before_create :assign_position
   after_update :check_if_game_finished
   after_save :update_score_record
 
@@ -93,10 +91,6 @@ class Prediction < ApplicationRecord
 
   def self.calculate_round_scores(round_id)
     where(round_id: round_id).find_each { |p| p.update!(score: p.calculate_score) }
-  end
-
-  def assign_position
-    self.position = round.position
   end
 
   def full_prediction_bonus?
