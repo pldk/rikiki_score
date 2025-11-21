@@ -40,7 +40,7 @@ class PredictionsController < ApplicationController
     respond_to do |format|
       format.turbo_stream do
         # clé de cache pour stats basée sur la dernière mise à jour des prédictions
-        stats_cache_key = ["round_stats", @round.id, @round.predictions.maximum(:updated_at)]
+        stats_cache_key = ['round_stats', @round.id, @round.predictions.maximum(:updated_at)]
 
         render turbo_stream: [
           # mise à jour de la cellule de prédiction du joueur
