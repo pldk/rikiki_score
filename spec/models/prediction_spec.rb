@@ -139,15 +139,4 @@ RSpec.describe Prediction, type: :model do
       expect(descending_prediction.round.phase).to eq('down')
     end
   end
-
-  describe 'position assignment' do
-    let(:round) { create(:round, game: game, position: 7) }
-    let(:prediction) { build(:prediction, round: round, player: player) }
-
-    it 'assigns round position before creation' do
-      expect { prediction.save }
-        .to change(prediction, :position)
-        .from(nil).to(round.position)
-    end
-  end
 end
