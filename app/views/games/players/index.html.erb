@@ -11,42 +11,41 @@
           <% @game.players.each do |player| %>
             <th scope="col" class="px-6 py-3"><%= player.name %></th>
           <% end %>
-          <th scope="col" class="px-6 py-3">Stat</th>
+          <th scope="col" class="px-6 py-3">Stats</th>
         </tr>
       </thead>
       <tbody>
-        <% @game.rounds.each do |round| %>
-          <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 border-gray-200 hover:bg-gray-50 dark:hover:bg-gray-600">
-            <!-- Round number -->
-            <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-              <%= round.length %>
-            </th>
-  
-            <!-- Player predictions -->
-            <% @game.players.each do |player| %>
-              <% prediction = round.predictions.find_by(player: player) %>
-              <td class="px-6 py-4">
-                <%= turbo_frame_tag "prediction_#{round.id}_#{player.id}" do %>
-                  <%= render "rounds/round_row",
-                        round: round,
-                        player: player,
-                        prediction: prediction,
-                        game: @game %>
+        <% @game.rounds.order(:position).each do |round| %>
+          <% cache ["round_row", round.id, round.predictions.maximum(:updated_at)] do %>
+            <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 border-gray-200 hover:bg-gray-50 dark:hover:bg-gray-600">
+              <!-- Round number -->
+              <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                <%= round.length %>
+              </th>
+
+              <!-- Player predictions -->
+              <% @game.players.each do |player| %>
+                <% prediction = round.predictions.find_by(player: player) %>
+                <td class="px-6 py-4">
+                  <%= render "rounds/round_row", round: round, player: player, prediction: prediction, game: @game %>
+                </td>
+              <% end %>
+
+              <!-- Stats for the round -->
+              <td class="px-6 py-4 font-semibold text-center">
+                <%= turbo_frame_tag "round_stats_#{round.id}" do %>
+                  <% cache ["round_stats", round.id, round.predictions.maximum(:updated_at)] do %>
+                    <%= render "rounds/round_stats", round: round %>
+                  <% end %>
                 <% end %>
               </td>
-            <% end %>
-            <!-- stats for the round -->
-            <td class="px-6 py-4 font-semibold text-center">
-              <%= turbo_frame_tag "round_stats_#{round.id}" do %>
-                <%= render "rounds/round_stats", round: round %>
-              <% end %>
-            </td>
-            
-          </tr>
+            </tr>
+          <% end %>
         <% end %>
       </tbody>
     </table>
   </div>
+
   <%= link_to "Go to scoreboards", @game, class: "btn btn-primary" if @game.finished? %>
-  <button class="text-white bg-brand box-border border border-transparent rounded-base text-sm px-4 py-2.5">"Go to menu"</button>
+  <button class="text-white bg-brand box-border border border-transparent rounded-base text-sm px-4 py-2.5">Go to menu</button>
 </div>

@@ -1,5 +1,4 @@
 # frozen_string_literal: true
-
 # == Schema Information
 #
 # Table name: predictions
@@ -13,7 +12,6 @@
 #  player_id        :integer          not null
 #  created_at       :datetime         not null
 #  updated_at       :datetime         not null
-#  position         :integer
 #
 # Indexes
 #

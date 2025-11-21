@@ -11,7 +11,10 @@
       <span class="text-sm text-gray-500 dark:text-gray-400">
         🏹 <%= prediction.predicted_tricks %>
       </span>
-
+      <%# Afficher étoile si c'est une star %>
+      <% if prediction.is_star? %>
+        <span class="text-yellow-400" title="Star Prediction">⭐️</span>
+      <% end %>
       <%= f.input :actual_tricks,
             collection: (0..prediction.round.length),
             label: false,

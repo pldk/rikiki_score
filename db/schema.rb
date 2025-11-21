@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2025_11_19_101956) do
+ActiveRecord::Schema[8.1].define(version: 2025_11_20_102612) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -46,7 +46,6 @@ ActiveRecord::Schema[8.1].define(version: 2025_11_19_101956) do
     t.boolean "is_star", default: false
     t.boolean "is_winner", default: false
     t.bigint "player_id", null: false
-    t.integer "position"
     t.integer "predicted_tricks"
     t.bigint "round_id", null: false
     t.datetime "updated_at", null: false
