@@ -1,22 +1,24 @@
-<div class="container mx-auto p-4">
+<div class="container min-w-full divide-y divide-gray-200 relative mx-auto p-4">
+  <% cache @game do %>
   <h1 class="mb-4 text-4xl font-extrabold leading-none tracking-tight text-gray-900 md:text-5xl lg:text-6xl dark:text-white">
     Partie #<%= @game.id %>
   </h1>
 
-  <div class="relative overflow-x-auto shadow-md sm:rounded-lg">
+  <div class="relative max-h-[70vh] overflow-y-auto overflow-x-auto shadow-md sm:rounded-lg">
     <table class="w-full text-sm text-left text-gray-500 dark:text-gray-400">
-      <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+      <thead class="sticky top-0 z-10 bg-gray-50 dark:bg-gray-700">
         <tr>
-          <th scope="col" class="px-6 py-3">Round</th>
+          <th scope="col" class="px-6 py-3 font-large">Round</th>
           <% @game.players.each do |player| %>
-            <th scope="col" class="px-6 py-3"><%= player.name %></th>
+            <th scope="col" class="px-6 py-3 text-center font-large"><%= player.name %></th>
           <% end %>
-          <th scope="col" class="px-6 py-3">Stats</th>
+          <th scope="col" class="px-6 py-3 font-large">Stat</th>
         </tr>
       </thead>
       <tbody>
         <% @game.rounds.order(:position).each do |round| %>
           <% cache ["round_row", round.id, round.predictions.maximum(:updated_at)] do %>
+            <% dealer = dealer_for_round(@game, round) %>
             <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 border-gray-200 hover:bg-gray-50 dark:hover:bg-gray-600">
               <!-- Round number -->
               <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
@@ -26,10 +28,25 @@
               <!-- Player predictions -->
               <% @game.players.each do |player| %>
                 <% prediction = round.predictions.find_by(player: player) %>
-                <td class="px-6 py-4">
+                <% last_score = @last_player_score[player] %>
+
+                <% cell_classes = "px-6 py-4" %> <!-- ajout border par défaut -->
+
+                <!-- Dealer -->
+                <% cell_classes += " border border-gray-400 dark:border-gray-600" if player == dealer %>
+
+                <!-- Leader uniquement sur la dernière cellule remplie -->
+                <% if prediction.present? &&
+                      prediction.score&.cumulative_value.present? &&
+                      prediction.score.cumulative_value == @best_score %>
+                  <% cell_classes += " border-4 border-yellow-400 dark:border-yellow-500 font-bold" %>
+                <% end %>
+
+                <td class="<%= cell_classes %>">
                   <%= render "rounds/round_row", round: round, player: player, prediction: prediction, game: @game %>
                 </td>
               <% end %>
+
 
               <!-- Stats for the round -->
               <td class="px-6 py-4 font-semibold text-center">
@@ -48,4 +65,5 @@
 
   <%= link_to "Go to scoreboards", @game, class: "btn btn-primary" if @game.finished? %>
   <button class="text-white bg-brand box-border border border-transparent rounded-base text-sm px-4 py-2.5">Go to menu</button>
+  <% end %>
 </div>

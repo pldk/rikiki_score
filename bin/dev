@@ -1,2 +1,39 @@
-#!/usr/bin/env ruby
-exec "./bin/rails", "server", *ARGV
+# #!/usr/bin/env ruby
+# exec "./bin/rails", "server", *ARGV
+#!/usr/bin/env bash
+# bin/dev - Lance Rails, Tailwind et autres watchers en dev
+
+set -e
+
+# Couleurs pour la sortie
+GREEN='\033[0;32m'
+BLUE='\033[0;34m'
+NC='\033[0m' # No Color
+
+echo -e "${GREEN}Starting development environment...${NC}"
+
+# Fonction pour lancer un processus en background avec nom et couleur
+start_process() {
+  local name="$1"
+  shift
+  local cmd="$*"
+  echo -e "${BLUE}Starting ${name}...${NC}"
+  $cmd &
+  PIDS+=($!)
+}
+
+PIDS=()
+
+# Lancer le serveur Rails
+start_process "Rails server" rails server -p 3000
+
+# Lancer Tailwind watch
+start_process "Tailwind CSS watch" rails tailwindcss:watch
+
+# Optionnel : si tu utilises vite/esbuild pour JS
+# start_process "Vite dev server" ./bin/vite dev
+
+# Attendre que tous les processus se terminent
+trap "echo 'Stopping processes...'; kill ${PIDS[*]}" SIGINT SIGTERM
+
+wait

@@ -80,6 +80,7 @@ class Game < ApplicationRecord
       update!(status: :finished)
     end
   end
+  
 
   private
 

@@ -6,6 +6,11 @@ module Games
 
     def index
       @players = @game.players
+      @last_player_score = @game.players.index_with do |player|
+        Score.for_game(@game).for_player(player).last&.cumulative_value
+      end
+
+      @best_score = @last_player_score.values.max
     end
 
     def new

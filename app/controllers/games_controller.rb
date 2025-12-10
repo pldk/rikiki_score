@@ -11,6 +11,11 @@ class GamesController < ApplicationController
     @game_players = @game.players
     @remaining_players = Player.all - @game.players
     @rounds = @game.rounds
+
+    @player_totals = @game.players.index_with do |player|
+      Score.for_game(@game).for_player(player).last&.cumulative_value || 0
+    end
+    @best_score = @player_totals.values.max
   end
 
   def new
