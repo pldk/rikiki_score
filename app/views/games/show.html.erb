@@ -4,13 +4,18 @@
     Partie #<%= @game.id %>
   </h1>
 
-  <div class="relative max-h-[70vh] overflow-y-auto overflow-x-auto shadow-md sm:rounded-lg">
+  <div class="relative overflow-y-auto overflow-x-auto shadow-md sm:rounded-lg">
     <table class="w-full text-sm text-left text-gray-500 dark:text-gray-400">
-      <thead class="sticky top-0 z-10 bg-gray-50 dark:bg-gray-700">
+      <thead class="z-10 bg-gray-50 dark:bg-gray-700">
         <tr>
           <th scope="col" class="px-6 py-3 font-large">Round</th>
           <% @game.players.each do |player| %>
-            <th scope="col" class="px-6 py-3 text-center font-large"><%= player.name %></th>
+            <th scope="col" class="px-6 py-3 text-center font-large">
+              <%= player.name %>
+              <% if winner?(player, @winner) %>
+                👑
+              <% end %>
+            </th>
           <% end %>
           <th scope="col" class="px-6 py-3 font-large">Stat</th>
         </tr>
@@ -27,7 +32,13 @@
               <!-- Player predictions -->
               <% @game.players.each do |player| %>
                 <% prediction = round.predictions.find_by(player: player) %>
-                <td class="px-6 py-4">
+                <% winner_classes = "px-6 py-4" %>
+
+                <% if player == @winner %>
+                  <% winner_classes += " border-4 border-double border-yellow-400 dark:border-yellow-500 font-bold" %>
+                <% end %>
+
+                <td class="<%= winner_classes %>">
                   <%= render "rounds/round_row", round: round, player: player, prediction: prediction, game: @game %>
                 </td>
               <% end %>

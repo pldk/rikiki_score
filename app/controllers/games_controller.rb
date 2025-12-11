@@ -11,11 +11,7 @@ class GamesController < ApplicationController
     @game_players = @game.players
     @remaining_players = Player.all - @game.players
     @rounds = @game.rounds
-
-    @player_totals = @game.players.index_with do |player|
-      Score.for_game(@game).for_player(player).last&.cumulative_value || 0
-    end
-    @best_score = @player_totals.values.max
+    @winner = @game.winner
   end
 
   def new
@@ -54,7 +50,7 @@ class GamesController < ApplicationController
   private
 
   def set_game
-    @game = Game.find(params[:id])
+    @game = Game.includes(rounds: :predictions).find(params[:id])
   end
 
   def game_params

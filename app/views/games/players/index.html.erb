@@ -17,7 +17,11 @@
       </thead>
       <tbody>
         <% @game.rounds.order(:position).each do |round| %>
-          <% cache ["round_row", round.id, round.predictions.maximum(:updated_at), @current_round] do %>
+          <% cache ["round_row", 
+                    round.id,
+                    round.predictions.map { |p| [p.id, p.updated_at, p.predicted_tricks, p.actual_tricks] }.flatten,
+                    round.scores.maximum(:updated_at),
+                    round.leader_score] do %>
             <% dealer = dealer_for_round(@game, round) %>
             <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 border-gray-200 hover:bg-gray-50 dark:hover:bg-gray-600">
               <!-- Round number -->
@@ -28,27 +32,18 @@
               <!-- Player predictions -->
               <% @game.players.each do |player| %>
                 <% prediction = round.predictions.find_by(player: player) %>
-                <% last_score = @last_player_score[player] %>
 
                 <% cell_classes = "px-6 py-4" %> 
-
                 <!-- Dealer -->
                 <% cell_classes += " border border-gray-400 dark:border-gray-600" if round == @current_round && player == dealer %>
 
-                <!-- Leader uniquement sur la dernière cellule remplie -->
-                <% if round == @previous_round &&
-                      prediction.present? &&
-                      prediction.score&.cumulative_value == @best_score_last_round %>
-                  <% cell_classes += " border-4 border-yellow-400 dark:border-yellow-500 font-bold" %>
-                <% end %>
+               
 
                 <td class="<%= cell_classes %>">
                   <%= render "rounds/round_row", round: round, player: player, prediction: prediction, game: @game %>
                 </td>
               <% end %>
               
-              
-
               <!-- Stats for the round -->
               <td class="px-6 py-4 font-semibold text-center">
                 <%= turbo_frame_tag "round_stats_#{round.id}" do %>
@@ -64,7 +59,7 @@
     </table>
   </div>
 
-  <%= link_to "Go to scoreboards", @game, class: "btn btn-primary" if @game.finished? %>
+  <%= link_to "Go to scoreboards", @game, class: "mt-3 inline-block px-4 py-2 bg-blue-600 text-white font-semibold rounded-lg shadow hover:bg-blue-700 transition" if @game.finished? %>
   <button class="text-white bg-brand box-border border border-transparent rounded-base text-sm px-4 py-2.5">Go to menu</button>
   <% end %>
 </div>

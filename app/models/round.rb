@@ -38,4 +38,8 @@ class Round < ApplicationRecord
     # actif si pas toutes les prédictions sont complètes
     completed_preds < total_players
   end
+
+  def leader_score
+    scores.maximum(:cumulative_value)
+  end
 end

@@ -85,6 +85,20 @@ class Game < ApplicationRecord
     rounds.order(:position).detect(&:active?)
   end
 
+  # def previous_round
+  #   rounds.where('position < ?', current_round.position)
+  #         .order(:position)
+  #         .last
+  # end
+
+  def max_score
+    scores.maximum(:cumulative_value)
+  end
+
+  def winner
+    scores.order(cumulative_value: :desc).first&.player
+  end
+
   private
 
   def mid
