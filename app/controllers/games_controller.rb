@@ -11,6 +11,7 @@ class GamesController < ApplicationController
     @game_players = @game.players
     @remaining_players = Player.all - @game.players
     @rounds = @game.rounds
+    @winner = @game.winner
   end
 
   def new
@@ -49,7 +50,7 @@ class GamesController < ApplicationController
   private
 
   def set_game
-    @game = Game.find(params[:id])
+    @game = Game.includes(rounds: :predictions).find(params[:id])
   end
 
   def game_params

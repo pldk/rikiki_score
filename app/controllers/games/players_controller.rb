@@ -6,6 +6,8 @@ module Games
 
     def index
       @players = @game.players
+      @current_round = @game.current_round
+      # @best_score_last_round = @game.previous_round.scores.maximum(:cumulative_value)
     end
 
     def new
@@ -44,7 +46,7 @@ module Games
     private
 
     def set_game
-      @game = Game.find(params[:game_id])
+      @game = Game.includes(rounds: :predictions).find(params[:game_id])
     end
 
     def player_params

@@ -25,7 +25,7 @@ class Player < ApplicationRecord
   validates :name, presence: true
 
   def games_played
-    games.size
+    games.count
   end
 
   def rank

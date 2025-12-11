@@ -27,4 +27,19 @@ class Round < ApplicationRecord
   accepts_nested_attributes_for :predictions
 
   enum :phase, { up: 0, down: 1 }
+
+  def active?
+    # nombre de joueurs dans la partie
+    total_players = game.players.count
+
+    # nombre de prédictions complètes pour ce round
+    completed_preds = predictions.where.not(actual_tricks: nil).count
+
+    # actif si pas toutes les prédictions sont complètes
+    completed_preds < total_players
+  end
+
+  def leader_score
+    scores.maximum(:cumulative_value)
+  end
 end
