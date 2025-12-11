@@ -80,7 +80,10 @@ class Game < ApplicationRecord
       update!(status: :finished)
     end
   end
-  
+
+  def current_round
+    rounds.order(:position).detect(&:active?)
+  end
 
   private
 

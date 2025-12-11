@@ -17,7 +17,7 @@
       </thead>
       <tbody>
         <% @game.rounds.order(:position).each do |round| %>
-          <% cache ["round_row", round.id, round.predictions.maximum(:updated_at)] do %>
+          <% cache ["round_row", round.id, round.predictions.maximum(:updated_at), @current_round] do %>
             <% dealer = dealer_for_round(@game, round) %>
             <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 border-gray-200 hover:bg-gray-50 dark:hover:bg-gray-600">
               <!-- Round number -->
@@ -30,15 +30,15 @@
                 <% prediction = round.predictions.find_by(player: player) %>
                 <% last_score = @last_player_score[player] %>
 
-                <% cell_classes = "px-6 py-4" %> <!-- ajout border par défaut -->
+                <% cell_classes = "px-6 py-4" %> 
 
                 <!-- Dealer -->
-                <% cell_classes += " border border-gray-400 dark:border-gray-600" if player == dealer %>
+                <% cell_classes += " border border-gray-400 dark:border-gray-600" if round == @current_round && player == dealer %>
 
                 <!-- Leader uniquement sur la dernière cellule remplie -->
-                <% if prediction.present? &&
-                      prediction.score&.cumulative_value.present? &&
-                      prediction.score.cumulative_value == @best_score %>
+                <% if round == @previous_round &&
+                      prediction.present? &&
+                      prediction.score&.cumulative_value == @best_score_last_round %>
                   <% cell_classes += " border-4 border-yellow-400 dark:border-yellow-500 font-bold" %>
                 <% end %>
 
@@ -46,7 +46,8 @@
                   <%= render "rounds/round_row", round: round, player: player, prediction: prediction, game: @game %>
                 </td>
               <% end %>
-
+              
+              
 
               <!-- Stats for the round -->
               <td class="px-6 py-4 font-semibold text-center">

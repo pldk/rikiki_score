@@ -11,6 +11,11 @@ module Games
       end
 
       @best_score = @last_player_score.values.max
+
+      @current_round = @game.current_round
+      @previous_round = Round.where("position < ?", @current_round.position).order(:position).last
+      @best_score_last_round = @previous_round.scores.maximum(:cumulative_value)
+
     end
 
     def new
