@@ -87,7 +87,7 @@ class Game < ApplicationRecord
 
   def previous_round
     return nil unless current_round
-    
+
     rounds.where('position < ?', current_round.position)
           .order(:position)
           .last
