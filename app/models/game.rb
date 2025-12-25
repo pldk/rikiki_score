@@ -85,11 +85,13 @@ class Game < ApplicationRecord
     rounds.order(:position).detect(&:active?)
   end
 
-  # def previous_round
-  #   rounds.where('position < ?', current_round.position)
-  #         .order(:position)
-  #         .last
-  # end
+  def previous_round
+    return nil unless current_round
+    
+    rounds.where('position < ?', current_round.position)
+          .order(:position)
+          .last
+  end
 
   def max_score
     scores.maximum(:cumulative_value)

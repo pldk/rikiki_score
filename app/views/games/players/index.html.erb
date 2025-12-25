@@ -1,5 +1,5 @@
 <div class="container min-w-full divide-y divide-gray-200 relative mx-auto p-4">
-  <% cache @game do %>
+  <% cache ["game_header", @game.id, @game.updated_at] do %>
   <h1 class="mb-4 text-4xl font-extrabold leading-none tracking-tight text-gray-900 md:text-5xl lg:text-6xl dark:text-white">
     Partie #<%= @game.id %>
   </h1>
@@ -19,7 +19,6 @@
         <% @game.rounds.order(:position).each do |round| %>
           <% cache ["round_row", 
                     round.id,
-                    round.predictions.map { |p| [p.id, p.updated_at, p.predicted_tricks, p.actual_tricks] }.flatten,
                     round.scores.maximum(:updated_at),
                     round.leader_score] do %>
             <% dealer = dealer_for_round(@game, round) %>
@@ -36,14 +35,11 @@
                 <% cell_classes = "px-6 py-4" %> 
                 <!-- Dealer -->
                 <% cell_classes += " border border-gray-400 dark:border-gray-600" if round == @current_round && player == dealer %>
-                
                 <!-- Leader uniquement sur la dernière cellule remplie -->
-                <% if round == @previous_round &&
-                      prediction.present? &&
-                      prediction.score&.cumulative_value == @best_score_last_round %>
+                <% if round == @previous_round && prediction&.score&.cumulative_value == round.leader_score %>
                   <% cell_classes += " border-4 border-yellow-400 dark:border-yellow-500 font-bold" %>
                 <% end %>
-                
+
                 <td class="<%= cell_classes %>">
                   <%= render "rounds/round_row", round: round, player: player, prediction: prediction, game: @game %>
                 </td>

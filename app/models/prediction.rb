@@ -21,7 +21,7 @@
 #
 
 class Prediction < ApplicationRecord
-  belongs_to :round
+  belongs_to :round, touch: true
   belongs_to :player
 
   has_one :score, dependent: :destroy

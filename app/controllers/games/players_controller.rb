@@ -7,7 +7,7 @@ module Games
     def index
       @players = @game.players
       @current_round = @game.current_round
-      # @best_score_last_round = @game.previous_round.scores.maximum(:cumulative_value)
+      @previous_round = @game.previous_round
     end
 
     def new
