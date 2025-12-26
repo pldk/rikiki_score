@@ -1,9 +1,9 @@
 # frozen_string_literal: true
 
 class Score < ApplicationRecord
-  belongs_to :prediction
+  belongs_to :prediction, touch: true
   belongs_to :player
-  belongs_to :round
+  belongs_to :round, touch: true
   has_one :game, through: :round
 
   validates :value, presence: true

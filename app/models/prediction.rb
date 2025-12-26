@@ -22,7 +22,7 @@
 
 class Prediction < ApplicationRecord
   belongs_to :round, touch: true
-  belongs_to :player
+  belongs_to :player, touch: true
 
   has_one :score, dependent: :destroy
 
@@ -33,6 +33,8 @@ class Prediction < ApplicationRecord
 
   after_update :check_if_game_finished
   after_save :update_score_record
+
+  after_commit :broadcast_update
 
   def only_one_star_per_phase
     return unless is_star
@@ -151,6 +153,12 @@ class Prediction < ApplicationRecord
     game.check_if_finished!
   end
 
+  def broadcast_update
+    broadcast_replace_to "game_#{round.game.id}_predictions",
+      target: "prediction_#{round.id}_#{player.id}",
+      partial: "rounds/round_row",
+      locals: { round: round, player: player, prediction: self, game: round.game }
+  end
   # def assign_last_round_star
   #   return if is_star? # déjà défini manuellement
 
