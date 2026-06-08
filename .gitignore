@@ -45,3 +45,6 @@
 .env.*.local
 
 /rikiki_dump.dump
+# Ignore key files for decrypting credentials and more.
+/config/*.key
+
