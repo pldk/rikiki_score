@@ -1,0 +1,7 @@
+#!/usr/bin/env bash
+set -o errexit
+
+bundle install
+SECRET_KEY_BASE=dummy bundle exec rails assets:precompile
+bundle exec rails assets:clean
+bundle exec rails db:migrate
