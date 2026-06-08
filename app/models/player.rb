@@ -37,7 +37,7 @@ class Player < ApplicationRecord
   end
 
   def capitalize_name
-    name.capitalize if name.present?
+    name.presence&.capitalize
   end
 
   def total_score_for(game)
