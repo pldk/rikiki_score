@@ -17,6 +17,4 @@ test:
 
 production:
   <<: *default
-  database: rikiki_score_production
-  username: rikiki_score
-  password: <%= ENV["RIKIKI_SCORE_DATABASE_PASSWORD"] %>
+  url: <%= ENV["DATABASE_URL"] %>

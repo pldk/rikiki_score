@@ -46,7 +46,8 @@ gem 'tzinfo-data', platforms: %i[mingw mswin x64_mingw jruby]
 
 # Reduces boot times through caching; required in config/boot.rb
 gem 'bootsnap', require: false
-
+gem 'simple_form'
+gem 'simple_form-tailwind'
 # Use Sass to process CSS
 # gem "sassc-rails"
 
@@ -63,8 +64,6 @@ group :development, :test do
   gem 'rubocop-capybara', '~> 2.22', '>= 2.22.1'
   gem 'rubocop-factory_bot', '~> 2.27', '>= 2.27.1'
   gem 'rubocop-rails', require: false
-  gem 'simple_form'
-  gem 'simple_form-tailwind'
 end
 
 group :test do
