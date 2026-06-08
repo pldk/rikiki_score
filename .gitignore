@@ -43,3 +43,5 @@
 # .env.*.local filres are wher ewe put actual secrets we need for test and dev
 # environments. So we don't want to check them in.
 .env.*.local
+
+/rikiki_dump.dump
