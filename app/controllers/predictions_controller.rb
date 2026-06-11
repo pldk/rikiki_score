@@ -39,9 +39,6 @@ class PredictionsController < ApplicationController
   def format_saved
     respond_to do |format|
       format.turbo_stream do
-        # clé de cache pour stats basée sur la dernière mise à jour des prédictions
-        stats_cache_key = ['round_stats', @round.id, @round.predictions.maximum(:updated_at)]
-
         render turbo_stream: [
           # mise à jour de la cellule de prédiction du joueur
           turbo_stream.replace(
@@ -50,10 +47,10 @@ class PredictionsController < ApplicationController
             locals: { prediction: @prediction, round: @round, game: @round.game, player: @prediction.player }
           ),
           # mise à jour des stats du round
-          turbo_stream.replace(
+          turbo_stream.update(
             "round_stats_#{@round.id}",
             partial: 'rounds/round_stats',
-            locals: { round: @round, cache_key: stats_cache_key }
+            locals: { round: @round }
           )
         ]
       end
