@@ -53,7 +53,7 @@ module Prediction::CumulativeScores # rubocop:disable Style/ClassAndModuleChildr
     end
   end
 
-  def broadcast_leader_cells_if_complete # rubocop:disable Metrics/AbcSize
+  def broadcast_leader_cells_if_complete
     game = round.game
     total_players = game.players.count
 

@@ -36,7 +36,7 @@
                 <% is_leader = round == last_completed && last_completed_leaders.include?(player) %>
 
                 <% cell_classes = "px-6 py-4" %>
-                <% cell_classes += " border border-gray-400 dark:border-gray-600" if round == @current_round && player == dealer %>
+                <% cell_classes += " border-2 border-green-400" if round == @current_round && player == dealer %>
 
                 <td class="<%= cell_classes %>">
                   <%= render "rounds/round_row", round: round, player: player, prediction: prediction, game: @game, is_leader: is_leader %>
