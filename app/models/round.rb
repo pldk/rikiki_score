@@ -42,4 +42,11 @@ class Round < ApplicationRecord
   def leader_score
     scores.maximum(:cumulative_value)
   end
+
+  def leaders
+    top = scores.maximum(:cumulative_value)
+    return [] unless top
+
+    scores.where(cumulative_value: top).map(&:player)
+  end
 end

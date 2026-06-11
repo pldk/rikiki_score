@@ -12,6 +12,8 @@ class GamesController < ApplicationController
     @remaining_players = Player.all - @game.players
     @rounds = @game.rounds
     @winner = @game.winner
+    @last_completed_round = @game.last_completed_round
+    @leaders = @last_completed_round&.leaders || []
   end
 
   def new
