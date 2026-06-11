@@ -1,7 +1,4 @@
-<% total_actual = round.predictions.sum { |p| p.actual_tricks.to_i } %>
-<% if total_actual > 0 %>
-  <%= round.length - total_actual %>
-<% else %>
-  <% total_plis = round.predictions.sum(&:predicted_tricks).to_i %>
-  <%= total_plis.zero? ? 0 : total_plis - round.length %>
-<% end %>
+<% total_predicted = round.predictions.sum { |p| p.predicted_tricks.to_i } %>
+<% has_predictions = round.predictions.any? { |p| !p.predicted_tricks.nil? } %>
+
+<%= has_predictions ? total_predicted - round.length : "-" %>

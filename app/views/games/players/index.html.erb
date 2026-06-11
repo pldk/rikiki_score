@@ -46,7 +46,7 @@
               <!-- Stats for the round -->
               <td class="px-6 py-4 font-semibold text-center">
                 <%= turbo_frame_tag "round_stats_#{round.id}" do %>
-                  <% cache ["round_stats", round.cache_key] do %>
+                  <% cache ["round_stats", "v2", round.cache_key] do %>
                     <%= render "rounds/round_stats", round: round %>
                   <% end %>
                 <% end %>

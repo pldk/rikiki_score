@@ -88,21 +88,23 @@ module Prediction::CumulativeScores # rubocop:disable Style/ClassAndModuleChildr
       )
     end
 
-    return unless prev_completed
-
-    game.players.each do |player|
-      broadcast_replace_to(
-        "game_#{game.id}_predictions",
-        target: "prediction_#{prev_completed.id}_#{player.id}",
-        partial: 'rounds/round_row',
-        locals: {
-          round: prev_completed,
-          player: player,
-          prediction: prev_completed.predictions.find { |p| p.player_id == player.id },
-          game: game,
-          is_leader: false
-        }
-      )
+    if prev_completed
+      game.players.each do |player|
+        broadcast_replace_to(
+          "game_#{game.id}_predictions",
+          target: "prediction_#{prev_completed.id}_#{player.id}",
+          partial: 'rounds/round_row',
+          locals: {
+            round: prev_completed,
+            player: player,
+            prediction: prev_completed.predictions.find { |p| p.player_id == player.id },
+            game: game,
+            is_leader: false
+          }
+        )
+      end
     end
+
+    broadcast_refresh_to("game_#{game.id}_predictions")
   end
 end
