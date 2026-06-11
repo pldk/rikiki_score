@@ -5,6 +5,9 @@
     Partie #<%= @game.id %>
   </h1>
 
+  <% last_completed = @previous_round %>
+  <% last_completed_leaders = last_completed&.leaders || [] %>
+
   <div class="relative max-h-[70vh] overflow-y-auto overflow-x-auto shadow-md sm:rounded-lg">
     <table class="w-full text-sm text-left text-gray-500 dark:text-gray-400">
       <thead class="sticky top-0 z-10 bg-gray-50 dark:bg-gray-700">
@@ -30,17 +33,13 @@
               <!-- Player predictions -->
               <% @game.players.each do |player| %>
                 <% prediction = round.predictions.find_by(player: player) %>
+                <% is_leader = round == last_completed && last_completed_leaders.include?(player) %>
 
-                <% cell_classes = "px-6 py-4" %> 
-                <!-- Dealer -->
+                <% cell_classes = "px-6 py-4" %>
                 <% cell_classes += " border border-gray-400 dark:border-gray-600" if round == @current_round && player == dealer %>
-                <!-- Leader uniquement sur la dernière cellule remplie -->
-                <% if round == @previous_round && prediction&.score&.cumulative_value == round.leader_score %>
-                  <% cell_classes += " border-4 border-yellow-400 dark:border-yellow-500 font-bold" %>
-                <% end %>
 
                 <td class="<%= cell_classes %>">
-                  <%= render "rounds/round_row", round: round, player: player, prediction: prediction, game: @game %>
+                  <%= render "rounds/round_row", round: round, player: player, prediction: prediction, game: @game, is_leader: is_leader %>
                 </td>
               <% end %>
               
