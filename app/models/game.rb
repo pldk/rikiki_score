@@ -71,6 +71,13 @@ class Game < ApplicationRecord
     rounds.find_by(phase: 'down', length: 1)
   end
 
+  def last_completed_round
+    total_players = players.count
+    rounds.order(:position).to_a.reverse.find do |r|
+      r.predictions.count { |p| p.actual_tricks.present? } == total_players
+    end
+  end
+
   def check_if_finished!
     last = last_round
     return unless last

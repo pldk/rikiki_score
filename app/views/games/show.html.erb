@@ -22,7 +22,7 @@
       </thead>
       <tbody>
         <% @game.rounds.order(:position).each do |round| %>
-          <% cache ["round_row", round.id, round.predictions.maximum(:updated_at)] do %>
+          <% cache ["round_row", round.id, round.predictions.maximum(:updated_at), @last_completed_round&.id] do %>
             <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 border-gray-200 hover:bg-gray-50 dark:hover:bg-gray-600">
               <!-- Round number -->
               <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
@@ -34,7 +34,7 @@
                 <% prediction = round.predictions.find_by(player: player) %>
                 <% winner_classes = "px-6 py-4" %>
 
-                <% if player == @winner %>
+                <% if round == @last_completed_round && @leaders.include?(player) %>
                   <% winner_classes += " border-4 border-double border-yellow-400 dark:border-yellow-500 font-bold" %>
                 <% end %>
 
