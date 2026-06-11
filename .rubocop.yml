@@ -54,3 +54,6 @@ plugins:
 
 RSpec/ExampleLength:
   Enabled: false
+
+Metrics/AbcSize:
+  Enabled: false

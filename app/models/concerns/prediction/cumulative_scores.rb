@@ -60,12 +60,12 @@ module Prediction::CumulativeScores # rubocop:disable Style/ClassAndModuleChildr
     return unless round.predictions.where.not(actual_tricks: nil).count == total_players
 
     completed = game.rounds
-      .joins(:predictions)
-      .group('rounds.id')
-      .having('COUNT(CASE WHEN predictions.actual_tricks IS NOT NULL THEN 1 END) = ?', total_players)
-      .order('rounds.position DESC')
-      .limit(2)
-      .to_a
+                    .joins(:predictions)
+                    .group('rounds.id')
+                    .having('COUNT(CASE WHEN predictions.actual_tricks IS NOT NULL THEN 1 END) = ?', total_players)
+                    .order('rounds.position DESC')
+                    .limit(2)
+                    .to_a
 
     return if completed.empty?
 
