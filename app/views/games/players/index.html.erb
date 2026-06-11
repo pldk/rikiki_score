@@ -22,7 +22,7 @@
       <tbody>
         <% @game.rounds.order(:position).each do |round| %>
         <% dealer = dealer_for_round(@game, round) %>
-        <% last_update = [round, round.predictions.maximum(:updated_at), @current_round, @previous_round] %>
+        <% last_update = [round, round.predictions.maximum(:updated_at), @previous_round] %>
         <% cache ["round_row", *last_update] do %>
           <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 border-gray-200 hover:bg-gray-50 dark:hover:bg-gray-600">
               <!-- Round number -->
@@ -36,7 +36,7 @@
                 <% is_leader = round == last_completed && last_completed_leaders.include?(player) %>
 
                 <% cell_classes = "px-6 py-4" %>
-                <% cell_classes += " border border-gray-400 dark:border-gray-600" if round == @current_round && player == dealer %>
+                <% cell_classes += " border-2 border-blue-400 dark:border-blue-500" if player == dealer %>
 
                 <td class="<%= cell_classes %>">
                   <%= render "rounds/round_row", round: round, player: player, prediction: prediction, game: @game, is_leader: is_leader %>
