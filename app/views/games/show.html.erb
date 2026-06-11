@@ -30,15 +30,17 @@
               </th>
 
               <!-- Player predictions -->
+              <% dealer = dealer_for_round(@game, round) %>
               <% @game.players.each do |player| %>
                 <% prediction = round.predictions.find_by(player: player) %>
-                <% winner_classes = "px-6 py-4" %>
+                <% cell_classes = "px-6 py-4" %>
 
+                <% cell_classes += " border-2 border-green-400" if round == @current_round && player == dealer %>
                 <% if round == @last_completed_round && @leaders.include?(player) %>
-                  <% winner_classes += " border-4 border-double border-yellow-400 dark:border-yellow-500 font-bold" %>
+                  <% cell_classes += " border-4 border-double border-yellow-400 dark:border-yellow-500 font-bold" %>
                 <% end %>
 
-                <td class="<%= winner_classes %>">
+                <td class="<%= cell_classes %>">
                   <%= render "rounds/round_row", round: round, player: player, prediction: prediction, game: @game %>
                 </td>
               <% end %>

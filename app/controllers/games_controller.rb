@@ -12,6 +12,7 @@ class GamesController < ApplicationController
     @remaining_players = Player.all - @game.players
     @rounds = @game.rounds
     @winner = @game.winner
+    @current_round = @game.current_round
     @last_completed_round = @game.last_completed_round
     @leaders = @last_completed_round&.leaders || []
   end
