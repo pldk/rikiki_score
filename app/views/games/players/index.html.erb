@@ -22,7 +22,7 @@
       <tbody>
         <% @game.rounds.order(:position).each do |round| %>
         <% dealer = dealer_for_round(@game, round) %>
-        <% last_update = [round, round.predictions.maximum(:updated_at), @current_round, @previous_round] %>
+        <% last_update = [round, round.predictions.maximum(:updated_at), @previous_round] %>
         <% cache ["round_row", *last_update] do %>
           <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 border-gray-200 hover:bg-gray-50 dark:hover:bg-gray-600">
               <!-- Round number -->
