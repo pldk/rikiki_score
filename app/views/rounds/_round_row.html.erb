@@ -1,5 +1,6 @@
 <%= turbo_frame_tag "prediction_#{round.id}_#{player.id}" do %>
-  <div class="p-3 rounded-lg transition-colors duration-300 <%= bg_class(prediction) %> hover:shadow-sm text-center">
+  <% leader_ring = local_assigns.fetch(:is_leader, false) ? "ring-2 ring-inset ring-yellow-400 dark:ring-yellow-500" : "" %>
+  <div class="p-3 rounded-lg transition-colors duration-300 <%= bg_class(prediction) %> hover:shadow-sm text-center <%= leader_ring %>">
 
     <% if prediction.present? && prediction.actual_tricks.present? %>
       <!-- Actual tricks remplis -->

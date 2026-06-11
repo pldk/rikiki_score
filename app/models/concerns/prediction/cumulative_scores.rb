@@ -21,6 +21,7 @@ module Prediction::CumulativeScores # rubocop:disable Style/ClassAndModuleChildr
     )
     score_record.save!
     update_cumulative_for_game
+    broadcast_leader_cells_if_complete
   end
 
   def update_cumulative_for_game
@@ -50,5 +51,60 @@ module Prediction::CumulativeScores # rubocop:disable Style/ClassAndModuleChildr
       previous_total += next_score.value
       next_score.update!(cumulative_value: previous_total)
     end
+  end
+
+  def broadcast_leader_cells_if_complete
+    game = round.game
+    total_players = game.players.count
+
+    return unless round.predictions.where.not(actual_tricks: nil).count == total_players
+
+    completed = game.rounds
+                    .joins(:predictions)
+                    .group('rounds.id')
+                    .having('COUNT(CASE WHEN predictions.actual_tricks IS NOT NULL THEN 1 END) = ?', total_players)
+                    .order('rounds.position DESC')
+                    .limit(2)
+                    .to_a
+
+    return if completed.empty?
+
+    last_completed = Round.includes(:predictions).find(completed[0].id)
+    prev_completed = completed[1] ? Round.includes(:predictions).find(completed[1].id) : nil
+    leaders = last_completed.leaders
+
+    game.players.each do |player|
+      broadcast_replace_to(
+        "game_#{game.id}_predictions",
+        target: "prediction_#{last_completed.id}_#{player.id}",
+        partial: 'rounds/round_row',
+        locals: {
+          round: last_completed,
+          player: player,
+          prediction: last_completed.predictions.find { |p| p.player_id == player.id },
+          game: game,
+          is_leader: leaders.include?(player)
+        }
+      )
+    end
+
+    if prev_completed
+      game.players.each do |player|
+        broadcast_replace_to(
+          "game_#{game.id}_predictions",
+          target: "prediction_#{prev_completed.id}_#{player.id}",
+          partial: 'rounds/round_row',
+          locals: {
+            round: prev_completed,
+            player: player,
+            prediction: prev_completed.predictions.find { |p| p.player_id == player.id },
+            game: game,
+            is_leader: false
+          }
+        )
+      end
+    end
+
+    broadcast_refresh_to("game_#{game.id}_predictions")
   end
 end

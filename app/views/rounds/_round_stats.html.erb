@@ -1,3 +1,4 @@
-<% total_cartes = round.length %>
-<% total_plis = round.predictions.sum(&:predicted_tricks).to_i %>
-<%= total_plis.zero? ? 0 : total_plis - total_cartes %>
+<% total_predicted = round.predictions.sum { |p| p.predicted_tricks.to_i } %>
+<% has_predictions = round.predictions.any? { |p| !p.predicted_tricks.nil? } %>
+
+<%= has_predictions ? total_predicted - round.length : "-" %>
